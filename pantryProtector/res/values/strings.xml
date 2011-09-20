@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, PantryProtectorActivity!</string>
+    <string name="hello">Hello World, PantryProtector!</string>
     <string name="app_name">Pantry Protector</string>
 </resources>
