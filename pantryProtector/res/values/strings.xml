@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, PantryProtectorActivity!</string>
+    <string name="hello">Hello World, HelloAndroid!</string>
     <string name="app_name">Pantry Protector</string>
+    <string name="scan_text">Scan Now</string>
+    <string name="skip_text">Skip</string>
+    <string name="abort_text">Abort</string>
+    <string name="local_service_started">1234</string>
+    <string name="Blank"> </string>
+    <string name="local_service_stopped">Local Notification Service Stopped</string>
+    <string name="local_service_connected">Local Service Connected</string>
+    <string name="local_service_label">Local Service Label</string>
+    <string name="local_service_disconnected">Local Service Disconnected</string>
 </resources>
