@@ -1,9 +1,12 @@
+/* PANTRY PROTECTOR
+
 /**
  * HelloAndroid
  * 
  * Version 0.0.0
  *
  * 09/22/2011
+
  */
 
 package us.food4thought.pantryprotect;
