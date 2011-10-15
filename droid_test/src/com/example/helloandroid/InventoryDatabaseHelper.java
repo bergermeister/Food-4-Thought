@@ -6,12 +6,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class InventoryDatabaseHelper extends SQLiteOpenHelper {
-	private static final String DATABASE_NAME = "inventorydata";
+	private static final String DATABASE_NAME = "applicationdata";
 
 	private static final int DATABASE_VERSION = 1;
 
 	//Create database
-	private static final String DATABASE_CREATE = "create table inventory (_id integer primary key autoincrement, "
+	private static final String DATABASE_CREATE = "create table item (_id integer primary key autoincrement, "
 			+ "category text not null, summary text not null, description text not null);";
 
 	public InventoryDatabaseHelper(Context context) {

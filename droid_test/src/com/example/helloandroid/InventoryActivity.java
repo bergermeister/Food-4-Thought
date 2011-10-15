@@ -31,8 +31,8 @@ public class InventoryActivity extends ListActivity {
 	private Cursor cursor;
 	
 	@Override
-	public void onCreate(Bundle s) {
-		super.onCreate(s);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.item_list);
 		this.getListView().setDividerHeight(2);
 		helper = new InvDBAdapter(this);

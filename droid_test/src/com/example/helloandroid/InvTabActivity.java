@@ -18,16 +18,16 @@ public class InvTabActivity extends TabActivity {
         TabHost.TabSpec spec;
         Intent intent;
         
-        final String[] LOCATIONS = new String[] {"Pantry","Refrigerator"};
+        //final String[] LOCATIONS = new String[] {"Pantry","Refrigerator"};
         
         //for(int i = -1; i < LOCATIONS.length; i++) {
 	        intent = new Intent().setClass(this, InventoryActivity.class);
-	        /*String name = "All";
-	        if(i > -1)
-	        	name = LOCATIONS[i];
-	        spec = tabHost.newTabSpec("inv"+name).setIndicator(name, res.getDrawable(R.drawable.ic_tab_inv)).setContent(intent);
-	        tabHost.addTab(spec);
-        }*/
+	        String name = "All";
+	        /*if(i > -1)*/
+	        	//name = LOCATIONS[i];
+	        /*spec = tabHost.newTabSpec("inv"+name).setIndicator(name, res.getDrawable(R.drawable.ic_tab_inv)).setContent(intent);
+	        tabHost.addTab(spec);*/
+        
         
         tabHost.setCurrentTab(0);
     }
