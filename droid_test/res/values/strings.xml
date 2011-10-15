@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, HelloAndroid!</string>
+    <string name="app_name">Hello, Android</string>
+    <string name="scan_text">Scan Now</string>
+    <string name="skip_text">Skip</string>
+    <string name="abort_text">Abort</string>
+    <string name="no_itenz">There are no items in the inventory</string>
+	<string name="menu_insert">Add Item</string>
+	<string name="menu_delete">Delete Item</string>
+	<string name="item_summary">Summary</string>
+	<string name="item_description">Delete Item</string>
+	<string name="edit_summary">Summary</string>
+	<string name="edit_description">Description</string>
+	<string name="edit_confirm">Confirm</string>
+	<color name="listcolor">#FFE87C</color>
+	<color name="black">#000000</color>
+</resources>
