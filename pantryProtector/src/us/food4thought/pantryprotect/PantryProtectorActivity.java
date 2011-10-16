@@ -31,6 +31,8 @@ public class PantryProtectorActivity extends TabActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        startService(new Intent(this, PantryProtectorLocalService.class));
+        
         Resources res = getResources();
         TabHost tabHost = getTabHost();
         TabHost.TabSpec spec;
@@ -54,7 +56,7 @@ public class PantryProtectorActivity extends TabActivity {
         
         tabHost.setCurrentTab(0);
         
-    	startService(new Intent(PantryProtectorActivity.this, NotificationService.class));
+    	startService(new Intent(PantryProtectorActivity.this, PantryProtectorLocalService.class));
     }
     
     public static class Controller extends Activity {
@@ -78,7 +80,7 @@ public class PantryProtectorActivity extends TabActivity {
                 // the service explicitly specifies our service component, because
                 // we want it running in our own process and don't want other
                 // applications to replace it.
-                startService(new Intent(Controller.this, NotificationService.class));
+                startService(new Intent(Controller.this, PantryProtectorLocalService.class));
             }
 
         };
@@ -88,7 +90,7 @@ public class PantryProtectorActivity extends TabActivity {
                 // Cancel a previous call to startService().  Note that the
                 // service will not actually stop at this point if there are
                 // still bound clients.
-                stopService(new Intent(Controller.this, NotificationService.class));
+                stopService(new Intent(Controller.this, PantryProtectorLocalService.class));
             }
 
 				

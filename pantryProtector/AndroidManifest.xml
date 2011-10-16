@@ -19,6 +19,7 @@
         <activity android:name=".InventoryActivity"></activity>
         <activity android:name=".OptionsActivity"></activity>
         <activity android:name=".InvTabActivity"></activity>
+        <service android:name=".PantryProtectorLocalService" android:enabled="true"/>
         <activity android:name=".ItemDetails"
 			android:windowSoftInputMode="stateVisible|adjustResize">
 			> </activity>
