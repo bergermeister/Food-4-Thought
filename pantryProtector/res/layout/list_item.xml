@@ -4,4 +4,6 @@
     android:layout_height="fill_parent"
     android:padding="10dp"
     android:textSize="16sp" >
+    <ProgressBar style="?android:attr/progressBarStyleHorizontal" android:layout_width="32dp" android:layout_height="32dp" android:id="@+id/progressBar"></ProgressBar>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingLeft="10dp" android:id="@+id/listText"></TextView>"
 </TextView>

@@ -24,6 +24,7 @@ public class InventoryActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.item_list);
 		this.getListView().setDividerHeight(2);
 		helper = new InvDBAdapter(this);
