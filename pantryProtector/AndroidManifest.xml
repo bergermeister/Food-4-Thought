@@ -19,6 +19,9 @@
         <activity android:name=".InventoryActivity"></activity>
         <activity android:name=".OptionsActivity"></activity>
         <activity android:name=".InvTabActivity"></activity>
+        <activity android:name=".ItemDetails"
+			android:windowSoftInputMode="stateVisible|adjustResize">
+			> </activity>
 
     </application>
 </manifest>
