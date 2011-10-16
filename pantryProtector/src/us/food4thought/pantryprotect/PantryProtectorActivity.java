@@ -40,7 +40,7 @@ public class PantryProtectorActivity extends TabActivity {
         spec = tabHost.newTabSpec("scan").setIndicator("Scan", res.getDrawable(R.drawable.ic_tab_scan)).setContent(intent);
         tabHost.addTab(spec);
         
-        intent = new Intent().setClass(this, InvTabActivity.class);
+        intent = new Intent().setClass(this, InventoryActivity.class);
         spec = tabHost.newTabSpec("inv").setIndicator("Inventory", res.getDrawable(R.drawable.ic_tab_inv)).setContent(intent);
         tabHost.addTab(spec);
         
