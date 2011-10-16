@@ -9,8 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.example.helloandroid.InvDBAdapter;
-
 public class ItemDetails extends Activity {
 	private EditText mTitleText;
 	private EditText mBodyText;
