@@ -13,6 +13,7 @@ public class InvDBAdapter {
 	public static final String KEY_CATEGORY = "category";
 	public static final String KEY_SUMMARY = "summary";
 	public static final String KEY_DESCRIPTION = "description";
+	public static final String KEY_EXPIRATION = "expiration";
 	private static final String DATABASE_TABLE = "item";
 	private Context context;
 	private SQLiteDatabase database;
@@ -35,9 +36,9 @@ public class InvDBAdapter {
 	
 /*Create a new food item If the food item is successfully created return the new * rowId for that note, otherwise return a -1 to indicate failure. */
 
-	public long createItem(String category, String summary, String description) {
+	public long createItem(String category, String summary, String description, String expiration) {
 		ContentValues initialValues = createContentValues(category, summary,
-				description);
+				description, expiration);
 
 		return database.insert(DATABASE_TABLE, null, initialValues);
 	}
@@ -46,9 +47,9 @@ public class InvDBAdapter {
 /** * Update the food item */
 
 	public boolean updateItem(long rowId, String category, String summary,
-			String description) {
+			String description, String expiration) {
 		ContentValues updateValues = createContentValues(category, summary,
-				description);
+				description, expiration);
 
 		return database.update(DATABASE_TABLE, updateValues, KEY_ROWID + "="
 				+ rowId, null) > 0;
@@ -66,7 +67,7 @@ public class InvDBAdapter {
 
 	public Cursor fetchAllItems() {
 		return database.query(DATABASE_TABLE, new String[] { KEY_ROWID,
-				KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION }, null, null, null,
+				KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, null, null, null,
 				null, null);
 	}
 
@@ -75,7 +76,7 @@ public class InvDBAdapter {
 
 	public Cursor fetchItem(long rowId) throws SQLException {
 		Cursor mCursor = database.query(true, DATABASE_TABLE, new String[] {
-				KEY_ROWID, KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION },
+				KEY_ROWID, KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION },
 				KEY_ROWID + "=" + rowId, null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
@@ -84,11 +85,12 @@ public class InvDBAdapter {
 	}
 
 	private ContentValues createContentValues(String category, String summary,
-			String description) {
+			String description, String expiration) {
 		ContentValues values = new ContentValues();
 		values.put(KEY_CATEGORY, category);
 		values.put(KEY_SUMMARY, summary);
 		values.put(KEY_DESCRIPTION, description);
+		values.put(KEY_EXPIRATION, expiration);
 		return values;
 	}
 }

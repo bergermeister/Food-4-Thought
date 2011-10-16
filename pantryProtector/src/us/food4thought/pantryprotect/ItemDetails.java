@@ -1,5 +1,7 @@
 package us.food4thought.pantryprotect;
 
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -8,13 +10,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import us.food4thought.pantryprotect.InvDBAdapter;
 
 public class ItemDetails extends Activity {
 	private EditText mTitleText;
 	private EditText mBodyText;
+	private EditText mExpText;
 	private Long mRowId;
 	private InvDBAdapter mDbHelper;
 	private Spinner mCategory;
+	private TextView mDateDisplay;
+    private int mYear;
+    private int mMonth;
+    private int mDay;
+
+    static final int DATE_DIALOG_ID = 0;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -25,6 +37,17 @@ public class ItemDetails extends Activity {
 		mCategory = (Spinner) findViewById(R.id.category);
 		mTitleText = (EditText) findViewById(R.id.edit_summary);
 		mBodyText = (EditText) findViewById(R.id.edit_description);
+		//mExpText = (EditText) findViewById(R.id.edit_expiration);
+		
+		/*Date picker*/
+		mDateDisplay = (TextView) findViewById(R.id.edit_expiration);
+		final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+
 
 		Button confirmButton = (Button) findViewById(R.id.edit_button);
 		mRowId = null;
@@ -89,15 +112,16 @@ public class ItemDetails extends Activity {
 		String category = (String) mCategory.getSelectedItem();
 		String summary = mTitleText.getText().toString();
 		String description = mBodyText.getText().toString();
+		String expiration = mDateDisplay.getText().toString();
 		
 
 		if (mRowId == null) {
-			long id = mDbHelper.createItem(category, summary, description);
+			long id = mDbHelper.createItem(category, summary, description, expiration);
 			if (id > 0) {
 				mRowId = id;
 			}
 		} else {
-			mDbHelper.updateItem(mRowId, category, summary, description);
+			mDbHelper.updateItem(mRowId, category, summary, description, expiration);
 		}
 	}
 }
