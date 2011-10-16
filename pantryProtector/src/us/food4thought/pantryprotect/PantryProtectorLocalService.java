@@ -1,5 +1,6 @@
 package us.food4thought.pantryprotect;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,7 +17,7 @@ public class PantryProtectorLocalService extends Service {
 	private static NotificationManager notifManager;
 	private static final int NOTIF_ID = 1234;
 	private Timer timer = new Timer();
-	private static int time = 60000;
+	private static Date date = new Date(2011, 9, 16, 12, 0);
 	
 	@Override
 	public void onCreate(){
@@ -40,11 +41,11 @@ public class PantryProtectorLocalService extends Service {
 	}
 	
 	private void startservice(){
-		timer.scheduleAtFixedRate(new TimerTask(){
+		timer.schedule(new TimerTask(){
 			@Override
 			public void run(){
 				notice();
-			}}, 0, time);
+			}}, date, 86400000);
 	}
 	
 	public void notice(){
