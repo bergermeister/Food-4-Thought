@@ -13,7 +13,7 @@ public class InvDBAdapter {
 	public static final String KEY_CATEGORY = "category";
 	public static final String KEY_SUMMARY = "summary";
 	public static final String KEY_DESCRIPTION = "description";
-	public static final String KEY_EXPIRATION = "expiration";
+    public static final String KEY_EXPIRATION = "expiration";
 	private static final String DATABASE_TABLE = "item";
 	private Context context;
 	private SQLiteDatabase database;

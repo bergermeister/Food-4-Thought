@@ -13,15 +13,6 @@ import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-import us.food4thought.pantryprotect.InvDBAdapter;
 
 public class InventoryActivity extends ListActivity {
 	private InvDBAdapter helper;
@@ -33,6 +24,7 @@ public class InventoryActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.item_list);
 		this.getListView().setDividerHeight(2);
 		helper = new InvDBAdapter(this);

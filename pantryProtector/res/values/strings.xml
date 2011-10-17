@@ -15,9 +15,9 @@
 	<string name="edit_summary">Summary</string>
 	<string name="edit_description">Description</string>
 	<string name="edit_confirm">Confirm</string>
-	<string name ="edit_expiration">Expiration</string>
-	<color name="listcolor">#FFFFFF</color>
-	<color name="black">#000000</color>
+    <string name="edit_expiration">Expiration Date</string>
+	<color name="listcolor">#000000</color>
+	<color name="white">#FFFFFF</color>
     <string name="local_service_started">1234</string>
     <string name="Blank"> </string>
     <string name="local_service_stopped">Local Notification Service Stopped</string>
