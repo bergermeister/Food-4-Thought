@@ -60,7 +60,6 @@ public class ItemDetails extends Activity {
 		confirmButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				setResult(RESULT_OK);
-				showDialog(DATE_DIALOG_ID);
 				finish();
 			}
 
