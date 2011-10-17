@@ -125,6 +125,7 @@ public class ItemDetails extends Activity {
 					.getColumnIndexOrThrow(InvDBAdapter.KEY_SUMMARY)));
 			mBodyText.setText(todo.getString(todo
 					.getColumnIndexOrThrow(InvDBAdapter.KEY_DESCRIPTION)));
+			mDateDisplay.setText(todo.getString(todo.getColumnIndexOrThrow(InvDBAdapter.KEY_EXPIRATION)));
 		}
 	}
 
