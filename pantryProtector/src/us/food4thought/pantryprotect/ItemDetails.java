@@ -150,15 +150,16 @@ public class ItemDetails extends Activity {
 		String category = (String) mCategory.getSelectedItem();
 		String summary = mTitleText.getText().toString();
 		String description = mBodyText.getText().toString();
+        String expiration = mDateDisplay.getText().toString();
 		
 
 		if (mRowId == null) {
-			long id = mDbHelper.createItem(category, summary, description);
+			long id = mDbHelper.createItem(category, summary, description, expiration);
 			if (id > 0) {
 				mRowId = id;
 			}
 		} else {
-			mDbHelper.updateItem(mRowId, category, summary, description);
+			mDbHelper.updateItem(mRowId, category, summary, description, expiration);
 		}
 	}
 }
