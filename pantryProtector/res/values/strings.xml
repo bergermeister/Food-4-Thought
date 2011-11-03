@@ -25,4 +25,42 @@
     <string name="local_service_connected">Local Service Connected</string>
     <string name="local_service_label">Local Service Label</string>
     <string name="local_service_disconnected">Local Service Disconnected</string>
+    <string-array name="sort_by">
+        <item>None</item><item>Name</item>
+        <item>Location</item>
+        <item>Expiration Date</item>
+        
+    </string-array>
+    <string-array name="alpha_filter"><item>None</item>
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>E</item>
+        <item>F</item>
+        <item>G</item>
+        <item>H</item>
+        <item>I</item>
+        <item>J</item>
+        <item>K</item>
+        <item>L</item>
+        <item>M</item>
+        <item>N</item>
+        <item>O</item>
+        <item>P</item>
+        <item>Q</item>
+        <item>R</item>
+        <item>S</item>
+        <item>T</item>
+        <item>U</item>
+        <item>V</item>
+        <item>W</item>
+        <item>X</item>
+        <item>Y</item>
+        <item>Z</item>
+        
+    </string-array>
+    <string name="sort_text">Sort By</string>
+    <string name="filter_text">Filter By</string>
 
+</resources>

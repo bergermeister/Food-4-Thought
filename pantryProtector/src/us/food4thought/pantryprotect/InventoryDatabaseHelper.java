@@ -13,6 +13,8 @@ public class InventoryDatabaseHelper extends SQLiteOpenHelper {
 	//Create database
 	private static final String DATABASE_CREATE = "create table item (_id integer primary key autoincrement, "
 			+ "category text not null, summary text not null, description text not null, expiration text not null);";
+	private static final String LOCATION_CREATE = "create table location (_id integer primary key autoincrement, "
+			+ "summary text not null, description text not null);";
 
 	public InventoryDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -21,6 +23,7 @@ public class InventoryDatabaseHelper extends SQLiteOpenHelper {
 	
 	@Override
 	public void onCreate(SQLiteDatabase database) {
+		database.execSQL(LOCATION_CREATE);
 		database.execSQL(DATABASE_CREATE);
 	}
 
@@ -32,7 +35,8 @@ public class InventoryDatabaseHelper extends SQLiteOpenHelper {
 		Log.w(InventoryDatabaseHelper.class.getName(),
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
-		database.execSQL("DROP TABLE IF EXISTS inventory");
+		database.execSQL("DROP TABLE IF EXISTS item");
+		database.execSQL("DROP TABLE IF EXISTS location");
 		onCreate(database);
 	}
 }

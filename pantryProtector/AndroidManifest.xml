@@ -22,7 +22,8 @@
         <service android:name=".PantryProtectorLocalService" android:enabled="true"/>
         <activity android:name=".ItemDetails"
 			android:windowSoftInputMode="stateVisible|adjustResize">
-			> </activity>
+			 </activity>
+        <activity android:name=".LocationDetails" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
 
     </application>
 </manifest>
