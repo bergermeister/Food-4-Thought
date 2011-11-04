@@ -9,15 +9,14 @@ package us.food4thought.pantryprotect;
 
 public final class R {
     public static final class array {
-        public static final int alpha_filter=0x7f040002;
-        public static final int priorities=0x7f040000;
-        public static final int sort_by=0x7f040001;
+        public static final int alpha_filter=0x7f060001;
+        public static final int sort_by=0x7f060000;
     }
     public static final class attr {
     }
     public static final class color {
-        public static final int listcolor=0x7f060000;
-        public static final int white=0x7f060001;
+        public static final int listcolor=0x7f050000;
+        public static final int white=0x7f050001;
     }
     public static final class drawable {
         public static final int ic_tab_inv=0x7f020000;
@@ -33,41 +32,42 @@ public final class R {
         public static final int wat=0x7f02000a;
     }
     public static final class id {
-        public static final int LinearLayout01=0x7f070009;
         public static final int TextView01=0x7f070014;
         public static final int basic_text=0x7f070000;
         public static final int category=0x7f070006;
         public static final int edit_button=0x7f07000c;
-        public static final int edit_description=0x7f07000b;
+        public static final int edit_description=0x7f07000a;
         public static final int edit_expiration=0x7f070007;
-        public static final int edit_summary=0x7f07000a;
-        public static final int frameLayout1=0x7f07001d;
+        public static final int edit_summary=0x7f070009;
+        public static final int frameLayout1=0x7f07001e;
         public static final int icon=0x7f070013;
         public static final int include1=0x7f070004;
         public static final int insert=0x7f070018;
         public static final int invFrame=0x7f070001;
         public static final int inv_filter=0x7f070012;
         public static final int inv_sort=0x7f07000f;
+        public static final int item_cancel=0x7f07000d;
         public static final int label=0x7f070015;
-        public static final int linearLayout1=0x7f07000d;
+        public static final int linearLayout1=0x7f07000b;
         public static final int linearLayout2=0x7f07000e;
         public static final int linearLayout3=0x7f070010;
         public static final int list=0x7f070005;
         public static final int listText=0x7f070017;
         public static final int loc_button=0x7f07001c;
+        public static final int loc_cancel=0x7f07001d;
         public static final int loc_description=0x7f07001b;
         public static final int loc_summary=0x7f07001a;
         public static final int new_loc=0x7f070019;
         public static final int pickDate=0x7f070008;
         public static final int progressBar=0x7f070016;
-        public static final int relativeLayout1=0x7f07001e;
-        public static final int relativeLayout2=0x7f07001f;
-        public static final int scanningNow=0x7f070022;
+        public static final int relativeLayout1=0x7f07001f;
+        public static final int relativeLayout2=0x7f070020;
+        public static final int scanningNow=0x7f070023;
         public static final int scrollView1=0x7f070003;
-        public static final int skip_button=0x7f070021;
+        public static final int skip_button=0x7f070022;
         public static final int textView1=0x7f070002;
         public static final int textView2=0x7f070011;
-        public static final int zxing_button=0x7f070020;
+        public static final int zxing_button=0x7f070021;
     }
     public static final class layout {
         public static final int basic_text=0x7f030000;
@@ -83,27 +83,28 @@ public final class R {
         public static final int scan=0x7f03000a;
     }
     public static final class string {
-        public static final int Blank=0x7f05000f;
-        public static final int abort_text=0x7f050004;
-        public static final int app_name=0x7f050001;
-        public static final int edit_confirm=0x7f05000c;
-        public static final int edit_description=0x7f05000b;
-        public static final int edit_expiration=0x7f05000d;
-        public static final int edit_summary=0x7f05000a;
-        public static final int filter_text=0x7f050015;
-        public static final int hello=0x7f050000;
-        public static final int item_description=0x7f050009;
-        public static final int item_summary=0x7f050008;
-        public static final int local_service_connected=0x7f050011;
-        public static final int local_service_disconnected=0x7f050013;
-        public static final int local_service_label=0x7f050012;
-        public static final int local_service_started=0x7f05000e;
-        public static final int local_service_stopped=0x7f050010;
-        public static final int menu_delete=0x7f050007;
-        public static final int menu_insert=0x7f050006;
-        public static final int no_itenz=0x7f050005;
-        public static final int scan_text=0x7f050002;
-        public static final int skip_text=0x7f050003;
-        public static final int sort_text=0x7f050014;
+        public static final int Blank=0x7f04000f;
+        public static final int abort_text=0x7f040004;
+        public static final int app_name=0x7f040001;
+        public static final int edit_cancel=0x7f040016;
+        public static final int edit_confirm=0x7f04000c;
+        public static final int edit_description=0x7f04000b;
+        public static final int edit_expiration=0x7f04000d;
+        public static final int edit_summary=0x7f04000a;
+        public static final int filter_text=0x7f040015;
+        public static final int hello=0x7f040000;
+        public static final int item_description=0x7f040009;
+        public static final int item_summary=0x7f040008;
+        public static final int local_service_connected=0x7f040011;
+        public static final int local_service_disconnected=0x7f040013;
+        public static final int local_service_label=0x7f040012;
+        public static final int local_service_started=0x7f04000e;
+        public static final int local_service_stopped=0x7f040010;
+        public static final int menu_delete=0x7f040007;
+        public static final int menu_insert=0x7f040006;
+        public static final int no_itenz=0x7f040005;
+        public static final int scan_text=0x7f040002;
+        public static final int skip_text=0x7f040003;
+        public static final int sort_text=0x7f040014;
     }
 }

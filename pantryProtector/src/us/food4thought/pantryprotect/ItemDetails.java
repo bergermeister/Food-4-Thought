@@ -12,8 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ItemDetails extends Activity {
 	private EditText mTitleText;
@@ -23,7 +25,7 @@ public class ItemDetails extends Activity {
 	private Spinner mCategory;
 	private TextView mDateDisplay;
 	private int mYear, mMonth, mDay;
-	private Button mPickDate;
+	private Button mPickDate, confirmButton, cancelButton;
 	private DatePickerDialog.OnDateSetListener mDateSetListener =
             new DatePickerDialog.OnDateSetListener() {
 
@@ -47,7 +49,8 @@ public class ItemDetails extends Activity {
 		mTitleText = (EditText) findViewById(R.id.edit_summary);
 		mBodyText = (EditText) findViewById(R.id.edit_description);
 		mDateDisplay = (TextView) findViewById(R.id.edit_expiration);
-		Button confirmButton = (Button) findViewById(R.id.edit_button);
+		confirmButton = (Button) findViewById(R.id.edit_button);
+		cancelButton = (Button) findViewById(R.id.item_cancel);
 		mPickDate = (Button) findViewById(R.id.pickDate);
 		mRowId = null;
 		Bundle extras = getIntent().getExtras();
@@ -56,8 +59,38 @@ public class ItemDetails extends Activity {
 		if (extras != null) {
 			mRowId = extras.getLong(InvDBAdapter.KEY_ROWID);
 		}
+		
+		// populate spinner list
+		InvDBAdapter helper = new InvDBAdapter(this);
+		helper.open();
+		Cursor cursor = helper.fetchAllLocations();
+		startManagingCursor(cursor);
+
+		String[] from = new String[] { InvDBAdapter.KEY_SUMMARY };
+		int[] to = new int[] { android.R.id.text1 };
+
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(getBaseContext(),
+				android.R.layout.simple_spinner_item, cursor, from, to);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mCategory.setAdapter(adapter);
+		
+		helper.close();
+		
+		// populate fields
 		populateFields();
+		
+		// add a click listener to the Confirm button
 		confirmButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View view) {
+				saveState();
+				setResult(RESULT_OK);
+				finish();
+			}
+
+		});
+		
+		// add a click listener to the Cancel button
+		cancelButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				setResult(RESULT_OK);
 				finish();
@@ -65,7 +98,7 @@ public class ItemDetails extends Activity {
 
 		});
 		
-		// add a click listener to the button
+		// add a click listener to the date picker
         mPickDate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 showDialog(DATE_DIALOG_ID);
@@ -111,9 +144,9 @@ public class ItemDetails extends Activity {
 			String category = todo.getString(todo
 					.getColumnIndexOrThrow(InvDBAdapter.KEY_CATEGORY));
 			
-			for (int i=0; i<mCategory.getCount();i++){
-				
-				String s = (String) mCategory.getItemAtPosition(i); 
+			for (int i=0; i<mCategory.getCount(); i++){
+				Cursor temp = (Cursor) mCategory.getItemAtPosition(i);
+				String s = temp.getString(temp.getColumnIndex(InvDBAdapter.KEY_SUMMARY)); 
 				Log.e(null, s +" " + category);
 				if (s.equalsIgnoreCase(category)){
 					mCategory.setSelection(i);
@@ -130,14 +163,7 @@ public class ItemDetails extends Activity {
 
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		saveState();
 		outState.putSerializable(InvDBAdapter.KEY_ROWID, mRowId);
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		saveState();
 	}
 
 	@Override
@@ -147,10 +173,13 @@ public class ItemDetails extends Activity {
 	}
 
 	private void saveState() {
-		String category = (String) mCategory.getSelectedItem();
+		Cursor temp = (Cursor) mCategory.getSelectedItem();
+		String category = temp.getString(temp.getColumnIndex(InvDBAdapter.KEY_SUMMARY));
 		String summary = mTitleText.getText().toString();
 		String description = mBodyText.getText().toString();
         String expiration = mDateDisplay.getText().toString();
+        
+        Toast.makeText(getApplicationContext(), category, 2000);
 		
 
 		if (mRowId == null) {

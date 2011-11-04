@@ -18,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -32,6 +31,7 @@ public class InventoryActivity extends ListActivity {
 	private Spinner mSort;
 	private Spinner mFilter;
 	private static ArrayList<String> firstChars = new ArrayList<String>();
+	private static ArrayList<String> locations = new ArrayList<String>();
 	private static final String[] strArray = new String[] {};
 	
 	@Override
@@ -70,14 +70,27 @@ public class InventoryActivity extends ListActivity {
 					cursor = helper.fetchAllLocations();
 					startManagingCursor(cursor);
 
-					String[] from = new String[] { InvDBAdapter.KEY_SUMMARY };
+					cursor.moveToFirst();
+					locations.clear();
+					while( !cursor.isAfterLast() ) {
+						locations.add(cursor.getString(cursor.getColumnIndex(InvDBAdapter.KEY_SUMMARY)));
+						cursor.moveToNext();
+					}
+					locations.add(0, "None");
+					
+					ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+							getBaseContext(), android.R.layout.simple_spinner_item, locations.toArray(strArray));
+					adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					mFilter.setAdapter(adapter);
+					
+					/*String[] from = new String[] { InvDBAdapter.KEY_SUMMARY };
 					int[] to = new int[] { android.R.id.text1 };
 
 					// Now create an array adapter and set it to display using our row
 					SimpleCursorAdapter adapter = new SimpleCursorAdapter(getBaseContext(),
 							android.R.layout.simple_spinner_item, cursor, from, to);
 					adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					mFilter.setAdapter(adapter);
+					mFilter.setAdapter(adapter);*/
 					
 				} else {
 					// generate blank filter list
@@ -179,7 +192,7 @@ public class InventoryActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		Intent i = new Intent(this, ItemDetails.class);
-		i.putExtra(helper.KEY_ROWID, id);
+		i.putExtra(InvDBAdapter.KEY_ROWID, id);
 		// Activity returns an result if called with startActivityForResult
 		
 		startActivityForResult(i, ACTIVITY_EDIT);
@@ -200,12 +213,28 @@ public class InventoryActivity extends ListActivity {
 					getBaseContext(), android.R.layout.simple_spinner_item, firstChars.toArray(strArray));
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			mFilter.setAdapter(adapter);
+		} else if( requestCode == ACTIVITY_CREATE && mSort.getSelectedItem().toString().equalsIgnoreCase("Location") ) {
+			cursor = helper.fetchAllLocations();
+			startManagingCursor(cursor);
+
+			cursor.moveToFirst();
+			locations.clear();
+			while( !cursor.isAfterLast() ) {
+				locations.add(cursor.getString(cursor.getColumnIndex(InvDBAdapter.KEY_SUMMARY)));
+				cursor.moveToNext();
+			}
+			locations.add(0, "None");
+			
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+					getBaseContext(), android.R.layout.simple_spinner_item, locations.toArray(strArray));
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			mFilter.setAdapter(adapter);
 		}
 	}
 
 	private void fillData() {
 		String filter_by = null;
-		if( mFilter.getCount() != 0 ) {
+		if( mFilter.getCount() != 0 && mFilter.getSelectedItemPosition() != 0 ) {
 			filter_by = mFilter.getSelectedItem().toString();
 		}
 		

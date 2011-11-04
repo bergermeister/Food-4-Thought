@@ -62,5 +62,6 @@
     </string-array>
     <string name="sort_text">Sort By</string>
     <string name="filter_text">Filter By</string>
+    <string name="edit_cancel">Cancel</string>
 
 </resources>

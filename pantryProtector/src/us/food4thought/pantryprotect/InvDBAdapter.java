@@ -15,7 +15,7 @@ public class InvDBAdapter {
 	public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_EXPIRATION = "expiration";
 	private static final String DATABASE_TABLE = "item";
-	private static final String LOCATION_TABLE = "locaiton";
+	private static final String LOCATION_TABLE = "location";
 	private Context context;
 	private SQLiteDatabase database;
 	private InventoryDatabaseHelper dbHelper;
@@ -77,7 +77,7 @@ public class InvDBAdapter {
 	public Cursor fetchAllItems(String order_by, String filter_by) {
 		if( order_by.equalsIgnoreCase("Name") ) {
 			String WHERE = null;
-			if( filter_by != null && !filter_by.equalsIgnoreCase("None") ) {
+			if( filter_by != null ) {
 				WHERE = KEY_SUMMARY + " like '" + filter_by + "%'";
 			}
 			return database.query(DATABASE_TABLE, new String[] { KEY_ROWID,
@@ -85,7 +85,7 @@ public class InvDBAdapter {
 					null, KEY_SUMMARY + " ASC");
 		} else if( order_by.equalsIgnoreCase("Location") ) {
 			String WHERE = null;
-			if( filter_by != null && !filter_by.equalsIgnoreCase("None") ) {
+			if( filter_by != null ) {
 				WHERE = KEY_CATEGORY + "='" + filter_by + "'";
 			}
 			return database.query(DATABASE_TABLE, new String[] { KEY_ROWID,
