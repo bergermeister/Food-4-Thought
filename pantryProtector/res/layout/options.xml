@@ -1,0 +1,27 @@
+
+    <TableLayout android:id="@+id/tableLayout1" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+        <TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <ToggleButton android:text="ToggleButton" android:id="@+id/toggleButton1" android:layout_width="wrap_content" android:layout_height="wrap_content"></ToggleButton>
+            <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:text="TextView" android:id="@+id/textView1" android:layout_width="wrap_content"></TextView>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <ToggleButton android:text="ToggleButton" android:id="@+id/toggleButton2" android:layout_width="wrap_content" android:layout_height="wrap_content"></ToggleButton>
+            <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:text="TextView" android:id="@+id/textView2" android:layout_width="wrap_content"></TextView>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow3" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <ToggleButton android:text="ToggleButton" android:id="@+id/toggleButton3" android:layout_width="wrap_content" android:layout_height="wrap_content"></ToggleButton>
+            <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:text="TextView" android:id="@+id/textView3" android:layout_width="wrap_content"></TextView>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow4" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <ToggleButton android:text="ToggleButton" android:id="@+id/toggleButton4" android:layout_width="wrap_content" android:layout_height="wrap_content"></ToggleButton>
+            <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:text="TextView" android:id="@+id/textView4" android:layout_width="wrap_content"></TextView>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow5" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <ToggleButton android:text="ToggleButton" android:id="@+id/toggleButton5" android:layout_width="wrap_content" android:layout_height="wrap_content"></ToggleButton>
+            <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:text="TextView" android:id="@+id/textView5" android:layout_width="wrap_content"></TextView>
+        </TableRow>
+        <TableRow android:id="@+id/tableRow6" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <ToggleButton android:text="ToggleButton" android:id="@+id/toggleButton6" android:layout_width="wrap_content" android:layout_height="wrap_content"></ToggleButton>
+            <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:layout_height="wrap_content" android:text="TextView" android:id="@+id/textView6" android:layout_width="wrap_content"></TextView>
+        </TableRow>
+    </TableLayout>
