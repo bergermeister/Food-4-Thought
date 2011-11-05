@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
     <FrameLayout android:id="@+id/frameLayout1" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
         <RelativeLayout android:layout_width="fill_parent" android:id="@+id/relativeLayout1" android:layout_height="fill_parent">
-            <TextView android:layout_height="wrap_content" android:id="@+id/textView1" android:layout_width="wrap_content" android:text="This is the Scan tab." android:layout_alignParentTop="true" android:layout_alignParentLeft="true"></TextView>
             <RelativeLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/relativeLayout2" android:layout_centerVertical="true" android:layout_centerHorizontal="true">
                 <Button android:layout_height="wrap_content" android:layout_width="128dp" android:text="@string/scan_text" android:layout_centerVertical="true" android:id="@+id/zxing_button"></Button>
                 <Button android:layout_toRightOf="@+id/skip_button" android:layout_marginLeft="150dp" android:layout_height="wrap_content" android:layout_width="128dp" android:text="@string/skip_text" android:layout_centerVertical="true" android:id="@+id/skip_button"></Button>

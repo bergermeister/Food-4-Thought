@@ -25,4 +25,11 @@
     <string name="local_service_connected">Local Service Connected</string>
     <string name="local_service_label">Local Service Label</string>
     <string name="local_service_disconnected">Local Service Disconnected</string>
-
+    <string name="settings_title">Settings Title</string>
+    <string name="back_title">Back Title</string>
+    <string name="exit_title">Exit Title</string>
+    <string name="music_title">Music Title</string>
+    <string name="hints_title">Hints title</string>
+    <string name="hints_summary">Hints Summary</string>
+    <string name="music_summary">Music_summary</string>
+</resources>

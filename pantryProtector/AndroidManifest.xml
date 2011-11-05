@@ -14,15 +14,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ScanActivity"></activity>
+        
         <activity android:name=".GListActivity"></activity>
         <activity android:name=".InventoryActivity"></activity>
+        <activity android:name=".ItemDetails" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
         <activity android:name=".OptionsActivity"></activity>
-        <activity android:name=".InvTabActivity"></activity>
-        <service android:name=".PantryProtectorLocalService" android:enabled="true"/>
-        <activity android:name=".ItemDetails"
-			android:windowSoftInputMode="stateVisible|adjustResize">
-			> </activity>
-
+        <service android:name=".PantryProtectorLocalService" 
+        	android:enabled="true">
+       	</service>
+		<activity android:name=".ScanActivity"></activity>
+		<uses-permission android:name="android.permission.VIBRATE" />
     </application>
 </manifest>
