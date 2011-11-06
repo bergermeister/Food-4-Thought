@@ -71,7 +71,6 @@ public class InvDBAdapter {
 				null, null);
 	}
 
-	
 /*Return a Cursor positioned at the defined item */
 
 	public Cursor fetchItem(long rowId) throws SQLException {

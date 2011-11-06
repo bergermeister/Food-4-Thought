@@ -142,7 +142,8 @@ public class OptionsActivity extends Activity {
 		    public void onClick(View v) {
 		        // Perform action on clicks
 		        if (toggleNotifications.isChecked()) {
-	            	showDialog(NOTI_DIALOG_ID);
+	            	//showDialog(NOTI_DIALOG_ID);
+		        	setContentView(R.layout.numberpicker_dialog);
 	            	notifOn = true;
 	            	//startServ();
 		        } 
@@ -230,8 +231,8 @@ public class OptionsActivity extends Activity {
 		dialog.setTitle("Custom Dialog"); 
 		TextView text = (TextView) dialog.findViewById(R.id.text);
     	text.setText("Test1");
-    	NumberPicker notifday = (NumberPicker) dialog.findViewById(R.id.numpick);
-    	mDay = notifday.mCurrent;
+    	//NumberPicker notifday = (NumberPicker) dialog.findViewById(R.id.numpick);
+    	//mDay = notifday.mCurrent;
     	
     	return dialog;
     }

@@ -31,8 +31,6 @@ public class PantryProtectorActivity extends TabActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        startService(new Intent(this, PantryProtectorLocalService.class));
-        
         Resources res = getResources();
         TabHost tabHost = getTabHost();
         TabHost.TabSpec spec;
@@ -95,5 +93,5 @@ public class PantryProtectorActivity extends TabActivity {
 
 				
         };
-    }
+    } 
 }
