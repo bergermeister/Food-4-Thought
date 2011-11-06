@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="@color/listcolor">
+		
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"> 
+	</LinearLayout>
+	<EditText android:layout_height="wrap_content" android:id="@+id/loc_summary" android:layout_width="fill_parent" android:hint="Name">
+		<requestFocus></requestFocus>
+	</EditText>
+
+
+	<EditText android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:layout_weight="1"
+		android:id="@+id/loc_description" android:hint="Description" android:gravity="top"></EditText>
+	<LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/linearLayout1">
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/loc_button"
+			android:text="@string/edit_confirm"></Button>
+		<Button android:layout_height="wrap_content" android:text="@string/edit_cancel" android:layout_width="wrap_content" android:id="@+id/loc_cancel"></Button>
+	</LinearLayout>
+
+
+</LinearLayout>
