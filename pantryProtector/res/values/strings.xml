@@ -32,4 +32,15 @@
     <string name="hints_title">Hints title</string>
     <string name="hints_summary">Hints Summary</string>
     <string name="music_summary">Music_summary</string>
+    <string-array name="sort_by">
+        <item>None</item><item>Name</item>
+        <item>Location</item>
+        <item>Expiration Date</item>
+        
+    </string-array>
+
+    <string name="sort_text">Sort By</string>
+    <string name="filter_text">Filter By</string>
+    <string name="edit_cancel">Cancel</string>
+
 </resources>

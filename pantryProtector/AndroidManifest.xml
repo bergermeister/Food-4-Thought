@@ -24,5 +24,7 @@
        	</service>
 		<activity android:name=".ScanActivity"></activity>
 		<uses-permission android:name="android.permission.VIBRATE" />
+        <activity android:name=".LocationDetails" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
+
     </application>
 </manifest>

@@ -15,6 +15,7 @@ public class InvDBAdapter {
 	public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_EXPIRATION = "expiration";
 	private static final String DATABASE_TABLE = "item";
+	private static final String LOCATION_TABLE = "location";
 	private Context context;
 	private SQLiteDatabase database;
 	private InventoryDatabaseHelper dbHelper;
@@ -33,6 +34,14 @@ public class InvDBAdapter {
 		dbHelper.close();
 	}
 
+	
+	/*
+	 * FOOD ITEMS
+	 * 	-category
+	 * 	-summary (name)
+	 * 	-description
+	 * 	-expiration (date)
+	 */
 	
 /*Create a new food item If the food item is successfully created return the new * rowId for that note, otherwise return a -1 to indicate failure. */
 
@@ -65,10 +74,32 @@ public class InvDBAdapter {
 	
 /*Return a Cursor over the list of all items in the database * * @return Cursor over all notes */
 
-	public Cursor fetchAllItems() {
-		return database.query(DATABASE_TABLE, new String[] { KEY_ROWID,
-				KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, null, null, null,
-				null, null);
+	public Cursor fetchAllItems(String order_by, String filter_by) {
+		if( order_by.equalsIgnoreCase("Name") ) {
+			String WHERE = null;
+			if( filter_by != null ) {
+				WHERE = KEY_SUMMARY + " like '" + filter_by + "%'";
+			}
+			return database.query(DATABASE_TABLE, new String[] { KEY_ROWID,
+					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, WHERE, null, null,
+					null, KEY_SUMMARY + " ASC");
+		} else if( order_by.equalsIgnoreCase("Location") ) {
+			String WHERE = null;
+			if( filter_by != null ) {
+				WHERE = KEY_CATEGORY + "='" + filter_by + "'";
+			}
+			return database.query(DATABASE_TABLE, new String[] { KEY_ROWID,
+					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, WHERE, null, null,
+					null, KEY_CATEGORY + " ASC");
+		} else if( order_by.equalsIgnoreCase("Expiration Date") ) {
+			return database.query(DATABASE_TABLE, new String[] { KEY_ROWID,
+					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, null, null, null,
+					null, KEY_EXPIRATION + " ASC");
+		} else {
+			return database.query(DATABASE_TABLE, new String[] { KEY_ROWID,
+					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, null, null, null,
+					null, null);
+		}
 	}
 
 /*Return a Cursor positioned at the defined item */
@@ -90,6 +121,71 @@ public class InvDBAdapter {
 		values.put(KEY_SUMMARY, summary);
 		values.put(KEY_DESCRIPTION, description);
 		values.put(KEY_EXPIRATION, expiration);
+		return values;
+	}
+	
+	
+	/*
+	 * STORAGE LOCATIONS
+	 * 	-summary (name)
+	 * 	-description
+	 */
+	
+/*Create a new location item If the location item is successfully created return the new * rowId for that node, otherwise return a -1 to indicate failure. */
+
+	public long createLocation(String summary, String description) {
+		ContentValues initialValues = createLocationContentValues(summary,
+				description);
+
+		return database.insert(LOCATION_TABLE, null, initialValues);
+	}
+
+	
+/** * Update the food item */
+
+	public boolean updateLocation(long rowId, String summary,
+			String description) {
+		ContentValues updateValues = createLocationContentValues(summary,
+				description);
+
+		return database.update(LOCATION_TABLE, updateValues, KEY_ROWID + "="
+				+ rowId, null) > 0;
+	}
+
+	
+/*Deletes food item */
+
+	public boolean deleteLocation(long rowId) {
+		return database.delete(LOCATION_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
+	}
+
+	
+/*Return a Cursor over the list of all items in the database * * @return Cursor over all notes */
+
+	public Cursor fetchAllLocations() {
+		return database.query(LOCATION_TABLE, new String[] { KEY_ROWID,
+				KEY_SUMMARY, KEY_DESCRIPTION }, null, null, null,
+				null, null);
+	}
+
+	
+/*Return a Cursor positioned at the defined item */
+
+	public Cursor fetchLocation(long rowId) throws SQLException {
+		Cursor mCursor = database.query(true, LOCATION_TABLE, new String[] {
+				KEY_ROWID, KEY_SUMMARY, KEY_DESCRIPTION },
+				KEY_ROWID + "=" + rowId, null, null, null, null, null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+		}
+		return mCursor;
+	}
+
+	private ContentValues createLocationContentValues(String summary,
+			String description) {
+		ContentValues values = new ContentValues();
+		values.put(KEY_SUMMARY, summary);
+		values.put(KEY_DESCRIPTION, description);
 		return values;
 	}
 }

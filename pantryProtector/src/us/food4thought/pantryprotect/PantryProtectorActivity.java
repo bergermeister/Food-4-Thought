@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,17 +25,27 @@ import android.widget.TabHost;
 public class PantryProtectorActivity extends TabActivity {
 	
 	public static int expired = 5;
+	private InvDBAdapter mDbHelper = new InvDBAdapter(this);
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {  	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
         Resources res = getResources();
         TabHost tabHost = getTabHost();
         TabHost.TabSpec spec;
         Intent intent;
+
+    	/*mDbHelper.open();
+        try {
+        	mDbHelper.fetchAllLocations();
+        } finally {
+        	intent = new Intent().setClass(this, LocationDetails.class);
+        	startActivityForResult(intent, 0);
+        }*/
+        
+        startService(new Intent(this, PantryProtectorLocalService.class));
         
         intent = new Intent().setClass(this, ScanActivity.class);
         spec = tabHost.newTabSpec("scan").setIndicator("Scan", res.getDrawable(R.drawable.ic_tab_scan)).setContent(intent);
