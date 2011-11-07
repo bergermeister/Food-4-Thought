@@ -1,7 +1,5 @@
 package us.food4thought.pantryprotect;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -25,12 +23,11 @@ public class OptionsActivity extends Activity {
 	private ToggleButton toggleLED;
 	private Button save;
 	private Button time;
-	FileOutputStream fos;
-	FileInputStream fis;
 	static final int TIME_DIALOG_ID = 0;
 	static final int NOTI_DIALOG_ID = 1;
 	static final int ALER_DIALOG_ID = 2;
 	private static boolean ledOn = true, vibrateOn = true, notifOn = true;
+	
 	
 	private NumberPicker.OnChangedListener mChangedListener = new NumberPicker.OnChangedListener() {
 		

@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,12 +15,14 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-public class PantryProtectorLocalService extends Service implements IDebugSwitch{
+public class PantryProtectorLocalService extends Service{
 	private static final String TAG = "PantryProtectorLocalService";
 	private static final int NOTIF_ID = 1234;
 	private static NotificationManager notifManager;
@@ -30,8 +33,10 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 	private static int count = 0;
 	private static boolean notifOn = true, flashOn = true, vibrateOn = true;
 	private final IBinder mBinder = new LocalBinder();
-	private FileInputStream fis;
-	private byte [] b = new byte[10];
+	private static InvDBAdapter adapter;
+	private static Long mRowId;
+	private List <Item> l;
+
 
 	// Returns this service to the activity and allows for binding
 	// the activity to this service.
@@ -42,12 +47,14 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 	}
 	
 	// Called when the service is first created.
-	@Override
-	public void onCreate(){
+	public void onCreate(Bundle bundle){
 		super.onCreate();
 		
 		// Create Notification Manager to handle notifications
 		notifManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		adapter = new InvDBAdapter(this);
+		adapter.open();
+		mRowId = (bundle == null) ? null : (Long) bundle.getSerializable(InvDBAdapter.KEY_ROWID);
 		
 		Log.d(TAG, "onCreate");
 	}
@@ -92,31 +99,17 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 		
 	// Checks the database then creates and pushes notifications and alerts to the android.
 	public void showNotification(){
+		
 		if(notifOn){
 			count++;
 			Notification note = new Notification(R.drawable.icon, "Food Expiring", System.currentTimeMillis());
 			
 			PendingIntent in = PendingIntent.getActivity(this, 0, new Intent(this, PantryProtectorActivity.class), 0);
-			
-			String s, s1;
-			s1 = b.toString();
-			try {
-				fis = openFileInput("config.cfg");
-				fis.read(b);
-				fis.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			s = b.toString();
 			//NotifierHelper.sendNotification(, PantryProtectorActivity.class, "Items about to expire!", s1+"/"+s+"/"+count, count, true, true);
 			
 			note.setLatestEventInfo(this, 
 					count + " items about to expire!",
-					s + " " + s1, in);			
+					count + " items expiring!" /*+ from[0] + from[1]*/, in);			
 
 			notifManager.notify(NOTIF_ID, note);
 			
