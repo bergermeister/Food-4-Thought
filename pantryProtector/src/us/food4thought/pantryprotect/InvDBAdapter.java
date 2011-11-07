@@ -17,6 +17,7 @@ public class InvDBAdapter {
     public static final String KEY_EXPIRATION = "expiration";
 	private static final String DATABASE_TABLE = "item";
 	private static final String LOCATION_TABLE = "location";
+	private static final String GLIST_TABLE = "glist";
 	private Context context;
 	private SQLiteDatabase database;
 	private InventoryDatabaseHelper dbHelper;
@@ -102,7 +103,29 @@ public class InvDBAdapter {
 					null, null);
 		}
 	}
+	public long createGList(String category, String summary, String description, String expiration) {
+		ContentValues initialValues = createContentValues(category, summary,
+				description, expiration);
 
+		return database.insert(GLIST_TABLE, null, initialValues);
+	}
+	/** * Update the food item */
+
+	public boolean updateGrocery(long rowId, String category, String summary,
+			String description, String expiration) {
+		ContentValues updateValues = createContentValues(category, summary,
+				description, expiration);
+
+		return database.update(GLIST_TABLE, updateValues, KEY_ROWID + "="
+				+ rowId, null) > 0;
+	}
+
+	
+/*Deletes food item */
+
+	public boolean deleteGrocery(long rowId) {
+		return database.delete(GLIST_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
+	}
 /*Return a Cursor positioned at the defined item */
 
 	public Cursor fetchItem(long rowId) throws SQLException {
@@ -202,5 +225,48 @@ public class InvDBAdapter {
 			cursor.moveToNext();
 		}
 		return l;
+	}
+	
+	/*Return a Cursor over the list of all items in the database * * @return Cursor over all notes */
+
+	public Cursor fetchAllGroceries(String order_by, String filter_by) {
+		if( order_by.equalsIgnoreCase("Name") ) {
+			String WHERE = null;
+			if( filter_by != null ) {
+				WHERE = KEY_SUMMARY + " like '" + filter_by + "%'";
+			}
+			return database.query(GLIST_TABLE, new String[] { KEY_ROWID,
+					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, WHERE, null, null,
+					null, KEY_SUMMARY + " ASC");
+		} else if( order_by.equalsIgnoreCase("Location") ) {
+			String WHERE = null;
+			if( filter_by != null ) {
+				WHERE = KEY_CATEGORY + "='" + filter_by + "'";
+			}
+			return database.query(GLIST_TABLE, new String[] { KEY_ROWID,
+					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, WHERE, null, null,
+					null, KEY_CATEGORY + " ASC");
+		} else if( order_by.equalsIgnoreCase("Expiration Date") ) {
+			return database.query(GLIST_TABLE, new String[] { KEY_ROWID,
+					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, null, null, null,
+					null, KEY_EXPIRATION + " ASC");
+		} else {
+			return database.query(GLIST_TABLE, new String[] { KEY_ROWID,
+					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, null, null, null,
+					null, null);
+		}
+	}
+
+	
+/*Return a Cursor positioned at the defined item */
+
+	public Cursor fetchGrocery(long rowId) throws SQLException {
+		Cursor mCursor = database.query(true, GLIST_TABLE, new String[] {
+				KEY_ROWID, KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION },
+				KEY_ROWID + "=" + rowId, null, null, null, null, null);
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+		}
+		return mCursor;
 	}
 }
