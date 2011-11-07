@@ -1,14 +1,12 @@
 package us.food4thought.pantryprotect;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +17,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class OptionsActivity extends Activity {
+	public static final String PREFS_NAME = "Options";
 	private static int mHour = 12, mMinute = 0, mDay = 5;
 	private TextView mTimeDisplay;
 	private ToggleButton toggleNotifications;
@@ -50,25 +49,56 @@ public class OptionsActivity extends Activity {
     	        }
     	    };
 	
+   Button.OnClickListener saveOnClickListener = new Button.OnClickListener(){
+	   public void onClick(View arg0) {
+		   SavePreferences();
+	   }
+   };
+    	    
 	@Override
-	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.options);
-		
-		readConfig();
-		createDisplay();
 
+		createDisplay();		
+		LoadPreferences();
+		
 		// display the set time
 		updateDisplay();
 	}
 	
-	private void startServ(){
-		startService(new Intent(this, PantryProtectorLocalService.class));
+	private void SavePreferences(){
+		SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putBoolean("LED", ledOn);
+		editor.commit();
+		
+		editor.putBoolean("Vibrate", vibrateOn);
+		editor.commit();
+		
+		editor.putBoolean("Notifications", notifOn);
+		editor.commit();
+		
+		editor.putInt("Hour", mHour);
+		editor.commit();
+		
+		editor.putInt("Minute", mMinute);
+		editor.commit();
+		
+		editor.putInt("Days", mDay);
+		editor.commit();
+		
+		Toast.makeText(this, "Preferences Saved Successfully", Toast.LENGTH_SHORT).show();
 	}
 	
-	private void stopServ(){
-		stopService(new Intent(this, PantryProtectorLocalService.class));
+	private void LoadPreferences(){
+		SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+		ledOn = sharedPreferences.getBoolean("LED", true);
+		vibrateOn = sharedPreferences.getBoolean("Vibrate", true);
+		notifOn = sharedPreferences.getBoolean("Notifications", true);
+		mHour = sharedPreferences.getInt("Hour", 12);
+		mMinute = sharedPreferences.getInt("Minute", 0);
+		mDay = sharedPreferences.getInt("Days", 5);
 	}
 	
 	private void createDisplay(){
@@ -77,27 +107,7 @@ public class OptionsActivity extends Activity {
 		
 		// Create actions for the save button
 		save = (Button) findViewById(R.id.save);
-		save.setOnClickListener(new OnClickListener(){
-			public void onClick(View v) {
-				
-				try {
-					fos = openFileOutput("config.cfg", Context.MODE_PRIVATE);
-					fos.write((mHour + ":" + mMinute).getBytes());
-					fos.close();
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if(notifOn){
-					//startServ();
-				}
-			}
-		});
-		
-		
+		save.setOnClickListener(saveOnClickListener);		
 		
 		// Create actions for the Set Time button
 		time = (Button) findViewById(R.id.setTimebutton1);
@@ -108,7 +118,7 @@ public class OptionsActivity extends Activity {
 		});
 		
 		toggleLED = (ToggleButton) findViewById(R.id.ledtogglebutton);
-		toggleLED.setChecked(true);
+		toggleLED.setChecked(ledOn);
 		toggleLED.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				if(toggleLED.isChecked()){
@@ -122,7 +132,7 @@ public class OptionsActivity extends Activity {
 		
 		// Create actions for the Alert Toggle button
 		toggleVibration = (ToggleButton) findViewById(R.id.vibratetogglebutton);
-		toggleVibration.setChecked(true);
+		toggleVibration.setChecked(vibrateOn);
 		toggleVibration.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				if(toggleVibration.isChecked()){
@@ -136,7 +146,7 @@ public class OptionsActivity extends Activity {
 
 		// Create actions for the Notifications Toggle button
 		toggleNotifications = (ToggleButton) findViewById(R.id.notificationtogglebutton);
-		toggleNotifications.setChecked(true);
+		toggleNotifications.setChecked(notifOn);
 		// Add a click listener to the toggle button
 		toggleNotifications.setOnClickListener(new OnClickListener() {
 		    public void onClick(View v) {
@@ -156,7 +166,7 @@ public class OptionsActivity extends Activity {
 		});
 	}
 	
-	//
+	// Update the TextView displaying the time.
     private void updateDisplay() {
         mTimeDisplay.setText(
             new StringBuilder()
@@ -171,25 +181,6 @@ public class OptionsActivity extends Activity {
     		return String.valueOf(c);
     	else
     		return "0" + String.valueOf(c);
-    }
-    
-    private void readConfig(){
-		String text;
-		byte [] buffer = new byte[500];
-		try {
-			fis = openFileInput("config.cfg");
-			fis.read(buffer);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			Toast.makeText(this, "No File", Toast.LENGTH_SHORT).show();
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		text = buffer.toString();
-		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-		
     }
     
     // Creates a dialog screen for a Time Picker
