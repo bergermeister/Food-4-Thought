@@ -15,6 +15,8 @@ public class InventoryDatabaseHelper extends SQLiteOpenHelper {
 			+ "category text not null, summary text not null, description text not null, expiration text not null);";
 	private static final String LOCATION_CREATE = "create table location (_id integer primary key autoincrement, "
 			+ "summary text not null, description text not null);";
+	private static final String GLIST_CREATE = "create table glist (_id integer primary key autoincrement, "
+			+ "category text not null, summary text not null, description text not null, expiration text not null);";
 
 	public InventoryDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -25,6 +27,7 @@ public class InventoryDatabaseHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase database) {
 		database.execSQL(LOCATION_CREATE);
 		database.execSQL(DATABASE_CREATE);
+		database.execSQL(GLIST_CREATE);
 	}
 
 	// Method is called during an upgrade of the database, e.g. if you increase
