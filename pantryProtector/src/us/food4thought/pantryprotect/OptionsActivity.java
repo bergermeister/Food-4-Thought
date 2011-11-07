@@ -58,7 +58,7 @@ public class OptionsActivity extends Activity {
 	}
 	
 	private void SavePreferences(){
-		SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+		SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPreferences.edit();
 		editor.putBoolean("LED", ledOn);
 		editor.commit();
@@ -82,7 +82,7 @@ public class OptionsActivity extends Activity {
 	}
 	
 	private void LoadPreferences(){
-		SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+		SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 		ledOn = sharedPreferences.getBoolean("LED", true);
 		vibrateOn = sharedPreferences.getBoolean("Vibrate", true);
 		notifOn = sharedPreferences.getBoolean("Notifications", true);

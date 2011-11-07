@@ -196,7 +196,7 @@ public class InvDBAdapter {
 		Cursor cursor = database.query(DATABASE_TABLE, s, null, null, null, null, null);
 		cursor.moveToFirst();
 		while(!cursor.isAfterLast()){
-			String name = cursor.getString(cursor.getColumnIndex(InvDBAdapter.KEY_DESCRIPTION));
+			String name = cursor.getString(cursor.getColumnIndex(InvDBAdapter.KEY_SUMMARY));
 			String exp = cursor.getString(cursor.getColumnIndex(InvDBAdapter.KEY_EXPIRATION));
 			l.add(new Item(name, exp, " ", " ", " "));
 			cursor.moveToNext();

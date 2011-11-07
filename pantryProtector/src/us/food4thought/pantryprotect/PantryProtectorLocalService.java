@@ -9,6 +9,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Binder;
 import android.os.IBinder;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class PantryProtectorLocalService extends Service implements IDebugSwitch{
+	public static final String PREFS_NAME = "Options";
 	private static final String TAG = "PantryProtectorLocalService";
 	private static final int NOTIF_ID = 1234;
 	private static NotificationManager notifManager;
@@ -23,7 +25,7 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 	private static Date date = new Date();
 	private static long day = 86400000;
 	private static long minute =  60000;
-	private static int count = 0;
+	private static int count = 0, mHour = 12, mMinute = 0, mDay = 5;
 	private static boolean notifOn = true, flashOn = true, vibrateOn = true;
 	private final IBinder mBinder = new LocalBinder();
 	private InvDBAdapter adapter = new InvDBAdapter(this);
@@ -86,17 +88,27 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 			}}, date, minute/15);
 	}
 		
+	private void LoadPreferences(){
+		SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+		flashOn = sharedPreferences.getBoolean("LED", true);
+		vibrateOn = sharedPreferences.getBoolean("Vibrate", true);
+		notifOn = sharedPreferences.getBoolean("Notifications", true);
+		mHour = sharedPreferences.getInt("Hour", 12);
+		mMinute = sharedPreferences.getInt("Minute", 0);
+		mDay = sharedPreferences.getInt("Days", 5);
+	}
+	
 	// Checks the database then creates and pushes notifications and alerts to the android.
 	public void showNotification(){
+		LoadPreferences();
 		adapter.open();
 		l = adapter.fetchAll();
+		//l = adapter.fetchAll();
 		adapter.close();
 		count = l.size();
 		if(notifOn){
-			
-			//NotifierHelper.sendNotification(notifManager, PantryProtectorActivity.class, "Items about to expire!", "/"+count, count, true, true);
-			
-			//count++;
+			String s = "";
+
 			Notification note = new Notification(R.drawable.icon, "Food Expiring", System.currentTimeMillis());
 
 			PendingIntent in = PendingIntent.getActivity(this, 0, new Intent(this, PantryProtectorActivity.class), 0);
@@ -122,7 +134,7 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 	        
 			note.setLatestEventInfo(this, 
 					count + " items about to expire!",
-					count + " items expiring!" , in);			
+					s + " are about to expire!" , in);			
 			
 			notifManager.notify(NOTIF_ID, note);
 			
