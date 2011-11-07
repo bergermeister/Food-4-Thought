@@ -46,7 +46,7 @@ public class LocationDetails extends Activity {
 		// add a click listener to the Cancel button
 		cancelButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				setResult(RESULT_OK);
+				setResult(RESULT_CANCELED);
 				finish();
 			}
 
@@ -85,6 +85,7 @@ public class LocationDetails extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		setResult(RESULT_CANCELED);
 		populateFields();
 	}
 

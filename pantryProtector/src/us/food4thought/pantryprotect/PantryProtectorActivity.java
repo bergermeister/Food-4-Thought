@@ -37,14 +37,6 @@ public class PantryProtectorActivity extends TabActivity {
         TabHost tabHost = getTabHost();
         TabHost.TabSpec spec;
         Intent intent;
-
-    	/*mDbHelper.open();
-        try {
-        	mDbHelper.fetchAllLocations();
-        } finally {
-        	intent = new Intent().setClass(this, LocationDetails.class);
-        	startActivityForResult(intent, 0);
-        }*/
         
         startService(new Intent(this, PantryProtectorLocalService.class));
         
@@ -106,4 +98,27 @@ public class PantryProtectorActivity extends TabActivity {
 				
         };
     }
+    
+    // Used to ensure that there is at least one location in the database
+    @Override
+	protected void onResume() {
+		super.onResume();
+	    mDbHelper.open();
+		Cursor temp = mDbHelper.fetchAllLocations();
+		if( temp == null || temp.getCount() < 1 ) {
+			Intent intent = new Intent(this, LocationDetails.class);
+			startActivity(intent);
+		}
+    }
+    
+    // Called with the result of the other activity
+ 	// requestCode was the origin request code send to the activity
+ 	// resultCode is the return code
+ 	// intend can be use to get some data from the caller
+ 	@Override
+ 	protected void onActivityResult(int requestCode, int resultCode,
+ 			Intent intent) {
+ 		super.onActivityResult(requestCode, resultCode, intent);
+ 		onResume();
+ 	}
 }

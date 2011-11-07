@@ -9,7 +9,6 @@ package us.food4thought.pantryprotect;
 
 public final class R {
     public static final class array {
-        public static final int alpha_filter=0x7f060001;
         public static final int sort_by=0x7f060000;
     }
     public static final class attr {
@@ -83,28 +82,28 @@ public final class R {
         public static final int scan=0x7f03000a;
     }
     public static final class string {
-        public static final int Blank=0x7f04000f;
+        public static final int Blank=0x7f040010;
         public static final int abort_text=0x7f040004;
         public static final int app_name=0x7f040001;
-        public static final int edit_cancel=0x7f040016;
+        public static final int edit_cancel=0x7f04000d;
         public static final int edit_confirm=0x7f04000c;
         public static final int edit_description=0x7f04000b;
-        public static final int edit_expiration=0x7f04000d;
+        public static final int edit_expiration=0x7f04000e;
         public static final int edit_summary=0x7f04000a;
-        public static final int filter_text=0x7f040015;
+        public static final int filter_text=0x7f040016;
         public static final int hello=0x7f040000;
         public static final int item_description=0x7f040009;
         public static final int item_summary=0x7f040008;
-        public static final int local_service_connected=0x7f040011;
-        public static final int local_service_disconnected=0x7f040013;
-        public static final int local_service_label=0x7f040012;
-        public static final int local_service_started=0x7f04000e;
-        public static final int local_service_stopped=0x7f040010;
+        public static final int local_service_connected=0x7f040012;
+        public static final int local_service_disconnected=0x7f040014;
+        public static final int local_service_label=0x7f040013;
+        public static final int local_service_started=0x7f04000f;
+        public static final int local_service_stopped=0x7f040011;
         public static final int menu_delete=0x7f040007;
         public static final int menu_insert=0x7f040006;
-        public static final int no_itenz=0x7f040005;
+        public static final int no_items=0x7f040005;
         public static final int scan_text=0x7f040002;
         public static final int skip_text=0x7f040003;
-        public static final int sort_text=0x7f040014;
+        public static final int sort_text=0x7f040015;
     }
 }

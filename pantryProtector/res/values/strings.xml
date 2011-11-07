@@ -7,7 +7,7 @@
     <string name="scan_text">Scan Now</string>
     <string name="skip_text">Skip</string>
     <string name="abort_text">Abort</string>
-    <string name="no_itenz">There are no items in the inventory</string>
+    <string name="no_items">There are no items in the inventory</string>
 	<string name="menu_insert">Add Item</string>
 	<string name="menu_delete">Delete Item</string>
 	<string name="item_summary">Summary</string>
@@ -15,7 +15,7 @@
 	<string name="edit_summary">Summary</string>
 	<string name="edit_description">Description</string>
 	<string name="edit_confirm">Confirm</string>
-    <string name="edit_expiration">Expiration Date</string>
+    <string name="edit_cancel">Cancel</string><string name="edit_expiration">Expiration Date</string>
 
 	<color name="listcolor">#000000</color>
 	<color name="white">#FFFFFF</color>
@@ -31,37 +31,8 @@
         <item>Expiration Date</item>
         
     </string-array>
-    <string-array name="alpha_filter"><item>None</item>
-        <item>A</item>
-        <item>B</item>
-        <item>C</item>
-        <item>D</item>
-        <item>E</item>
-        <item>F</item>
-        <item>G</item>
-        <item>H</item>
-        <item>I</item>
-        <item>J</item>
-        <item>K</item>
-        <item>L</item>
-        <item>M</item>
-        <item>N</item>
-        <item>O</item>
-        <item>P</item>
-        <item>Q</item>
-        <item>R</item>
-        <item>S</item>
-        <item>T</item>
-        <item>U</item>
-        <item>V</item>
-        <item>W</item>
-        <item>X</item>
-        <item>Y</item>
-        <item>Z</item>
-        
-    </string-array>
     <string name="sort_text">Sort By</string>
     <string name="filter_text">Filter By</string>
-    <string name="edit_cancel">Cancel</string>
+    
 
 </resources>

@@ -74,7 +74,7 @@ public class ScanActivity extends Activity {
 	            scanResult.setText(contents);
 	            resetMainMenu();
 	        } else if (resultCode == RESULT_CANCELED) {
-	            scanResult.setText("Fail Scan");
+	            scanResult.setText("Scan Failed");
 	        }
 	    }
 	}
