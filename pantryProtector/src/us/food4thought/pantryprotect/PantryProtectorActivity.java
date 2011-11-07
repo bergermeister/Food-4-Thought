@@ -45,8 +45,6 @@ public class PantryProtectorActivity extends TabActivity {
         	startActivityForResult(intent, 0);
         }*/
         
-        startService(new Intent(this, PantryProtectorLocalService.class));
-        
         intent = new Intent().setClass(this, ScanActivity.class);
         spec = tabHost.newTabSpec("scan").setIndicator("Scan", res.getDrawable(R.drawable.ic_tab_scan)).setContent(intent);
         tabHost.addTab(spec);

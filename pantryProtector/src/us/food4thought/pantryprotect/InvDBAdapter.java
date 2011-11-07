@@ -1,5 +1,6 @@
 package us.food4thought.pantryprotect;
 
+import java.util.ArrayList;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -187,5 +188,19 @@ public class InvDBAdapter {
 		values.put(KEY_SUMMARY, summary);
 		values.put(KEY_DESCRIPTION, description);
 		return values;
+	}
+	
+	public ArrayList <Item> fetchAll(){
+		ArrayList <Item> l = new ArrayList<Item>();
+		String [] s = new String[] {KEY_DESCRIPTION, KEY_EXPIRATION, KEY_SUMMARY, KEY_CATEGORY};
+		Cursor cursor = database.query(DATABASE_TABLE, s, null, null, null, null, null);
+		cursor.moveToFirst();
+		while(!cursor.isAfterLast()){
+			String name = cursor.getString(cursor.getColumnIndex(InvDBAdapter.KEY_DESCRIPTION));
+			String exp = cursor.getString(cursor.getColumnIndex(InvDBAdapter.KEY_EXPIRATION));
+			l.add(new Item(name, exp, " ", " ", " "));
+			cursor.moveToNext();
+		}
+		return l;
 	}
 }

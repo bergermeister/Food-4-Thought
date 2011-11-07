@@ -26,6 +26,7 @@ public class ItemDetails extends Activity {
 	private TextView mDateDisplay;
 	private int mYear, mMonth, mDay;
 	private Button mPickDate, confirmButton, cancelButton;
+	private boolean scan = false;
 	private DatePickerDialog.OnDateSetListener mDateSetListener =
             new DatePickerDialog.OnDateSetListener() {
 
@@ -58,6 +59,11 @@ public class ItemDetails extends Activity {
 				.getSerializable(InvDBAdapter.KEY_ROWID);
 		if (extras != null) {
 			mRowId = extras.getLong(InvDBAdapter.KEY_ROWID);
+			if(extras.containsKey("SCAN_TITLE"))
+			{
+				scan = true;
+				mTitleText.setText(extras.getString("SCAN_TITLE"));
+			}
 		}
 		
 		// populate spinner list
@@ -138,7 +144,7 @@ public class ItemDetails extends Activity {
     }
 	
 	private void populateFields() {
-		if (mRowId != null) {
+		if (mRowId != null && !scan) {
 			Cursor todo = mDbHelper.fetchItem(mRowId);
 			startManagingCursor(todo);
 			String category = todo.getString(todo
@@ -182,7 +188,7 @@ public class ItemDetails extends Activity {
         Toast.makeText(getApplicationContext(), category, 2000);
 		
 
-		if (mRowId == null) {
+		if (mRowId == null || scan) {
 			long id = mDbHelper.createItem(category, summary, description, expiration);
 			if (id > 0) {
 				mRowId = id;

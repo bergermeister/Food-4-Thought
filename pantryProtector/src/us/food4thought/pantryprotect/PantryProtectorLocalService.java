@@ -1,28 +1,21 @@
 package us.food4thought.pantryprotect;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-public class PantryProtectorLocalService extends Service{
+public class PantryProtectorLocalService extends Service implements IDebugSwitch{
 	private static final String TAG = "PantryProtectorLocalService";
 	private static final int NOTIF_ID = 1234;
 	private static NotificationManager notifManager;
@@ -33,9 +26,8 @@ public class PantryProtectorLocalService extends Service{
 	private static int count = 0;
 	private static boolean notifOn = true, flashOn = true, vibrateOn = true;
 	private final IBinder mBinder = new LocalBinder();
-	private static InvDBAdapter adapter;
-	private static Long mRowId;
-	private List <Item> l;
+	private InvDBAdapter adapter = new InvDBAdapter(this);
+	private ArrayList <Item> l = new ArrayList<Item>();
 
 
 	// Returns this service to the activity and allows for binding
@@ -47,14 +39,11 @@ public class PantryProtectorLocalService extends Service{
 	}
 	
 	// Called when the service is first created.
-	public void onCreate(Bundle bundle){
+	public void onCreate(){
 		super.onCreate();
 		
 		// Create Notification Manager to handle notifications
 		notifManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		adapter = new InvDBAdapter(this);
-		adapter.open();
-		mRowId = (bundle == null) ? null : (Long) bundle.getSerializable(InvDBAdapter.KEY_ROWID);
 		
 		Log.d(TAG, "onCreate");
 	}
@@ -99,18 +88,42 @@ public class PantryProtectorLocalService extends Service{
 		
 	// Checks the database then creates and pushes notifications and alerts to the android.
 	public void showNotification(){
-		
+		adapter.open();
+		l = adapter.fetchAll();
+		adapter.close();
+		count = l.size();
 		if(notifOn){
-			count++;
+			
+			//NotifierHelper.sendNotification(notifManager, PantryProtectorActivity.class, "Items about to expire!", "/"+count, count, true, true);
+			
+			//count++;
 			Notification note = new Notification(R.drawable.icon, "Food Expiring", System.currentTimeMillis());
-			
+
 			PendingIntent in = PendingIntent.getActivity(this, 0, new Intent(this, PantryProtectorActivity.class), 0);
-			//NotifierHelper.sendNotification(, PantryProtectorActivity.class, "Items about to expire!", s1+"/"+s+"/"+count, count, true, true);
-			
+
+			note.icon = R.drawable.icon;
+			note.tickerText = "Food Expiring";
+			note.when = System.currentTimeMillis();
+			note.number = count;
+			note.flags |= Notification.FLAG_AUTO_CANCEL;
+			if (flashOn) {
+				// add lights
+	            note.flags |= Notification.FLAG_SHOW_LIGHTS;
+	            note.ledARGB = Color.CYAN;
+	            note.ledOnMS = 500;
+	            note.ledOffMS = 500;
+	        }
+			 
+	        if (vibrateOn) {
+	            // add vibs
+	        	if (debug) Log.i("DEBUG", ">>>>> ViBrAtInG. >>>>>");
+			    note.vibrate = new long[] {100, 200, 200, 200, 200, 200, 1000, 200, 200, 200, 1000, 200};
+			}
+	        
 			note.setLatestEventInfo(this, 
 					count + " items about to expire!",
-					count + " items expiring!" /*+ from[0] + from[1]*/, in);			
-
+					count + " items expiring!" , in);			
+			
 			notifManager.notify(NOTIF_ID, note);
 			
 		}

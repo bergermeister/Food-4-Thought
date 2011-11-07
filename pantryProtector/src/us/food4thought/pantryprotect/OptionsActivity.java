@@ -25,16 +25,9 @@ public class OptionsActivity extends Activity {
 	private Button time;
 	static final int TIME_DIALOG_ID = 0;
 	static final int NOTI_DIALOG_ID = 1;
-	static final int ALER_DIALOG_ID = 2;
+	static final int VIBR_DIALOG_ID = 2;
+	static final int FLAS_DIALOG_ID = 3;
 	private static boolean ledOn = true, vibrateOn = true, notifOn = true;
-	
-	
-	private NumberPicker.OnChangedListener mChangedListener = new NumberPicker.OnChangedListener() {
-		
-		public void onChanged(NumberPicker picker, int oldVal, int newVal) {
-			mDay = newVal;
-		}
-	};
 	
 	// the callback received when the user "sets" the time in the dialog
     private TimePickerDialog.OnTimeSetListener mTimeSetListener =
@@ -46,11 +39,11 @@ public class OptionsActivity extends Activity {
     	        }
     	    };
 	
-   Button.OnClickListener saveOnClickListener = new Button.OnClickListener(){
+    Button.OnClickListener saveOnClickListener = new Button.OnClickListener(){
 	   public void onClick(View arg0) {
 		   SavePreferences();
 	   }
-   };
+    };
     	    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -149,8 +142,8 @@ public class OptionsActivity extends Activity {
 		    public void onClick(View v) {
 		        // Perform action on clicks
 		        if (toggleNotifications.isChecked()) {
-	            	//showDialog(NOTI_DIALOG_ID);
-		        	setContentView(R.layout.numberpicker_dialog);
+	            	showDialog(NOTI_DIALOG_ID);
+		        	//setContentView(R.layout.numberpicker_dialog);
 	            	notifOn = true;
 	            	//startServ();
 		        } 
@@ -192,8 +185,8 @@ public class OptionsActivity extends Activity {
 		case NOTI_DIALOG_ID:
 			dialog = NotificationNumberPickerDialog(this);
 			break;
-		case ALER_DIALOG_ID:
-			dialog = AlertNumberPickerDialog(this);
+		case VIBR_DIALOG_ID:
+			dialog = VibrateNumberPickerDialog(this);
 			break;
         default:
         	dialog = null;
@@ -201,7 +194,7 @@ public class OptionsActivity extends Activity {
         return dialog;
     }
     
-    protected Dialog AlertNumberPickerDialog(Context context){
+    protected Dialog VibrateNumberPickerDialog(Context context){
     	Dialog dialog;
     	dialog = new Dialog(context);
 		dialog.setContentView(R.layout.numberpicker_dialog);
@@ -216,12 +209,12 @@ public class OptionsActivity extends Activity {
 		Dialog dialog;
 		dialog = new Dialog(context);
 		dialog.setContentView(R.layout.numberpicker_dialog);
-		dialog.setTitle("Custom Dialog"); 
+		dialog.setTitle("Pick Number of Days"); 
 		TextView text = (TextView) dialog.findViewById(R.id.text);
-    	text.setText("Test1");
-    	//NumberPicker notifday = (NumberPicker) dialog.findViewById(R.id.numpick);
-    	//mDay = notifday.mCurrent;
-    	
+    	text.setText("Set the number of days before expiration to begin receiving notifications in the status bar.");
+    	NumberPicker notifday = (NumberPicker) dialog.findViewById(R.id.numpick);
+    	//Button set = (Button) dialog.findViewById(R.id.numpick);
+
     	return dialog;
     }
     

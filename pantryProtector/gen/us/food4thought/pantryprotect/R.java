@@ -49,16 +49,16 @@ public final class R {
     }
     public static final class id {
         public static final int TextView01=0x7f080013;
-        public static final int button2=0x7f08002a;
-        public static final int button3=0x7f08002b;
-        public static final int button4=0x7f08002c;
+        public static final int button2=0x7f08002b;
+        public static final int button3=0x7f08002c;
+        public static final int button4=0x7f08002d;
         public static final int category=0x7f080005;
         public static final int decrement=0x7f08001f;
         public static final int edit_button=0x7f08000b;
         public static final int edit_description=0x7f080009;
         public static final int edit_expiration=0x7f080006;
         public static final int edit_summary=0x7f080008;
-        public static final int frameLayout1=0x7f08002e;
+        public static final int frameLayout1=0x7f08002f;
         public static final int icon=0x7f080012;
         public static final int include1=0x7f080003;
         public static final int increment=0x7f08001d;
@@ -68,11 +68,11 @@ public final class R {
         public static final int inv_sort=0x7f08000e;
         public static final int item_cancel=0x7f08000c;
         public static final int label=0x7f080014;
-        public static final int ledtogglebutton=0x7f080029;
+        public static final int ledtogglebutton=0x7f08002a;
         public static final int linearLayout1=0x7f08000a;
         public static final int linearLayout2=0x7f08000d;
         public static final int linearLayout3=0x7f08000f;
-        public static final int linearlayout10=0x7f080024;
+        public static final int linearlayout10=0x7f080025;
         public static final int list=0x7f080004;
         public static final int listText=0x7f080016;
         public static final int loc_button=0x7f08001b;
@@ -80,26 +80,27 @@ public final class R {
         public static final int loc_description=0x7f08001a;
         public static final int loc_summary=0x7f080019;
         public static final int new_loc=0x7f080018;
-        public static final int notificationtogglebutton=0x7f080027;
+        public static final int notificationtogglebutton=0x7f080028;
         public static final int numberpicker_dialog=0x7f080021;
+        public static final int numpick=0x7f080023;
         public static final int pickDate=0x7f080007;
         public static final int pref_num_picker=0x7f080020;
         public static final int progressBar=0x7f080015;
-        public static final int relativeLayout1=0x7f08002f;
-        public static final int relativeLayout2=0x7f080030;
-        public static final int save=0x7f08002d;
-        public static final int scanningNow=0x7f080033;
+        public static final int relativeLayout1=0x7f080030;
+        public static final int relativeLayout2=0x7f080031;
+        public static final int save=0x7f08002e;
+        public static final int scanningNow=0x7f080034;
         public static final int scrollView1=0x7f080002;
-        public static final int setTimebutton1=0x7f080026;
-        public static final int skip_button=0x7f080032;
+        public static final int setTimebutton1=0x7f080027;
+        public static final int skip_button=0x7f080033;
         public static final int text=0x7f080022;
         public static final int textView1=0x7f080001;
         public static final int textView2=0x7f080010;
-        public static final int timeDisplay=0x7f080025;
+        public static final int timeDisplay=0x7f080026;
         public static final int timepicker_input=0x7f08001e;
-        public static final int verticalScrollView1=0x7f080023;
-        public static final int vibratetogglebutton=0x7f080028;
-        public static final int zxing_button=0x7f080031;
+        public static final int verticalScrollView1=0x7f080024;
+        public static final int vibratetogglebutton=0x7f080029;
+        public static final int zxing_button=0x7f080032;
     }
     public static final class layout {
         public static final int inv=0x7f030000;
