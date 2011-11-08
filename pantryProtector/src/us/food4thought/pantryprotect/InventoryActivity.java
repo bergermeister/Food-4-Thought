@@ -23,22 +23,25 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 public class InventoryActivity extends ListActivity {
-	private InvDBAdapter helper;
-	private static final int ACTIVITY_CREATE = 0;
-	private static final int ACTIVITY_EDIT = 1;
+	private InvDBAdapter helper;							// database access
+	private static final int ACTIVITY_CREATE = 0;			// key: creating new item
+	private static final int ACTIVITY_EDIT = 1;				// key: editing pre-existing item
+	private static final int LOCATION_MANAGE = 2;			// key: creating or deleting location
 	private static final int DELETE_ID = Menu.FIRST + 1;
 	private Cursor cursor;
 	private Spinner mSort;
 	private Spinner mFilter;
 	private static ArrayList<String> firstChars = new ArrayList<String>();
 	private static ArrayList<String> locations = new ArrayList<String>();
-	private static final String[] strArray = new String[] {};
+	private static final String[] strArray = new String[] {};	// empty string array for casting purposes
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.item_list);
+		
+		// find 
 		mSort = (Spinner) findViewById(R.id.inv_sort);
 		mFilter = (Spinner) findViewById(R.id.inv_filter);
 		this.getListView().setDividerHeight(2);
@@ -184,7 +187,7 @@ public class InventoryActivity extends ListActivity {
 	
 	private void createLocation() {
 		Intent i = new Intent(this, LocationDetails.class);
-		startActivityForResult(i, ACTIVITY_CREATE);
+		startActivityForResult(i, LOCATION_MANAGE);
 	}
 
 	// ListView and view (row) on which was clicked, position and

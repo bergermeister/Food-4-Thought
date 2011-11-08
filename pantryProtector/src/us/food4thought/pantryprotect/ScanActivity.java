@@ -103,6 +103,7 @@ public class ScanActivity extends Activity {
 	    		}
 	        } else if (resultCode == RESULT_CANCELED) {
 	            // Handle cancel
+	            scanResult.setText("Scan Failed");
 	        }
 	    }
 	}

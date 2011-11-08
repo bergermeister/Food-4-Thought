@@ -165,7 +165,7 @@ public class InvDBAdapter {
 	}
 
 	
-/** * Update the food item */
+/** * Update the location */
 
 	public boolean updateLocation(long rowId, String summary,
 			String description) {
@@ -177,14 +177,14 @@ public class InvDBAdapter {
 	}
 
 	
-/*Deletes food item */
+/*Deletes location */
 
 	public boolean deleteLocation(long rowId) {
 		return database.delete(LOCATION_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
 	}
 
 	
-/*Return a Cursor over the list of all items in the database * * @return Cursor over all notes */
+/*Return a Cursor over the list of all locations in the database * * @return Cursor over all notes */
 
 	public Cursor fetchAllLocations() {
 		return database.query(LOCATION_TABLE, new String[] { KEY_ROWID,
@@ -193,7 +193,7 @@ public class InvDBAdapter {
 	}
 
 	
-/*Return a Cursor positioned at the defined item */
+/*Return a Cursor positioned at the defined location */
 
 	public Cursor fetchLocation(long rowId) throws SQLException {
 		Cursor mCursor = database.query(true, LOCATION_TABLE, new String[] {
