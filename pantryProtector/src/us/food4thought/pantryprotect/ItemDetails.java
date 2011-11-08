@@ -61,9 +61,7 @@ public class ItemDetails extends Activity {
 		}
 		
 		// populate spinner list
-		InvDBAdapter helper = new InvDBAdapter(this);
-		helper.open();
-		Cursor cursor = helper.fetchAllLocations();
+		Cursor cursor = mDbHelper.fetchAllLocations();
 		startManagingCursor(cursor);
 
 		String[] from = new String[] { InvDBAdapter.KEY_SUMMARY };
@@ -73,8 +71,6 @@ public class ItemDetails extends Activity {
 				android.R.layout.simple_spinner_item, cursor, from, to);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mCategory.setAdapter(adapter);
-		
-		helper.close();
 		
 		// populate fields
 		populateFields();
