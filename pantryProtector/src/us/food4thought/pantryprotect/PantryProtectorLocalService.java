@@ -103,11 +103,10 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 		LoadPreferences();
 		adapter.open();
 		l = adapter.fetchAll();
-		//l = adapter.fetchAll();
 		adapter.close();
 		count = l.size();
 		if(notifOn){
-			String s = "";
+			String s = /*l.get(0).getExp() + " " + l.get(1).getExp()*/ " ";
 
 			Notification note = new Notification(R.drawable.icon, "Food Expiring", System.currentTimeMillis());
 
