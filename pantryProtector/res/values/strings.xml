@@ -42,6 +42,7 @@
 
     <string name="sort_text">Sort By</string>
     <string name="filter_text">Filter By</string>
+    <string name="location_req">You must add one location before you can continue.</string>
     
 
 </resources>
