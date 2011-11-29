@@ -3,9 +3,11 @@ package us.food4thought.pantryprotect;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class LocationDetails extends Activity {
 	private EditText mTitleText;
@@ -87,6 +89,16 @@ public class LocationDetails extends Activity {
 		super.onResume();
 		setResult(RESULT_CANCELED);
 		populateFields();
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK && mDbHelper.fetchAllLocations().getCount() == 0) {
+			// require user to create a location
+			Toast.makeText(getApplicationContext(), R.string.location_req, Toast.LENGTH_LONG).show();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	private void saveState() {
