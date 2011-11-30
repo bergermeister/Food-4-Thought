@@ -1,6 +1,10 @@
 package us.food4thought.pantryprotect;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Vector;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -213,19 +217,58 @@ public class InvDBAdapter {
 		return values;
 	}
 	
+	public String fetchAll(int day){
+		int count = 0;
+		String data = "00";
+		String [] s = new String[] {KEY_DESCRIPTION, KEY_EXPIRATION, KEY_SUMMARY, KEY_CATEGORY};
+		Cursor cursor = database.query(DATABASE_TABLE, s, null, null, null, null, null);
+		cursor.moveToFirst();
+		Date date = new Date();
+		int month = date.getMonth();
+		int d = date.getDay();
+		int year = date.getYear();
+		while(!cursor.isAfterLast()){
+			String exp = cursor.getString(cursor.getColumnIndex(s[1]));
+			Integer month2;
+			Integer d2;
+			Integer year2;
+			int i = exp.indexOf('-');
+			month2 = Integer.parseInt(exp.substring(0, i));
+			int i2 = exp.indexOf('-', 3);
+			d2 = Integer.parseInt(exp.substring(i + 1, i2));
+			year2 = Integer.parseInt(exp.substring(i2 + 1, exp.length() - 1));
+			//System.out.println(exp);
+			System.out.println(month2 + "-" + d2 + "-" + year2);
+			if (true){
+				
+			}
+			cursor.moveToNext();
+		}
+		data = data + count;
+		return data;
+	}
+	
+	// Method has pointer errors, requires fixing
+	/*
 	public ArrayList <Item> fetchAll(){
 		ArrayList <Item> l = new ArrayList<Item>();
 		String [] s = new String[] {KEY_DESCRIPTION, KEY_EXPIRATION, KEY_SUMMARY, KEY_CATEGORY};
 		Cursor cursor = database.query(DATABASE_TABLE, s, null, null, null, null, null);
 		cursor.moveToFirst();
 		while(!cursor.isAfterLast()){
-			String name = cursor.getString(cursor.getColumnIndex(InvDBAdapter.KEY_SUMMARY));
-			String exp = cursor.getString(cursor.getColumnIndex(InvDBAdapter.KEY_EXPIRATION));
+			final String exp = cursor.getString(1);
+			final String name = cursor.getString(2);
 			l.add(new Item(name, exp, " ", " ", " "));
+			for (int i = 0; i < l.size(); i++){
+				System.out.println(l.get(i).getName());
+			}
+			
 			cursor.moveToNext();
 		}
+		
 		return l;
 	}
+	*/
 	
 	/*Return a Cursor over the list of all items in the database * * @return Cursor over all notes */
 

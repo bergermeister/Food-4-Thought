@@ -17,21 +17,30 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class PantryProtectorLocalService extends Service implements IDebugSwitch{
-	public static final String PREFS_NAME = "Options";
-	private static final String TAG = "PantryProtectorLocalService";
-	private static final int NOTIF_ID = 1234;
-	private static NotificationManager notifManager;
-	private static Timer timer = new Timer();
-	private static Date date = new Date();
-	private static long day = 86400000;
-	private static long minute =  60000;
-	private static int count = 0, mHour = 12, mMinute = 0, mDay = 5;
-	private static boolean notifOn = true, flashOn = true, vibrateOn = true;
-	private final IBinder mBinder = new LocalBinder();
-	private InvDBAdapter adapter = new InvDBAdapter(this);
-	private ArrayList <Item> l = new ArrayList<Item>();
+	public static final String PREFS_NAME = "Options";							// Name of Shared Preferences
+	private static final String TAG = "PantryProtectorLocalService";			// Tag for this service, used for logging
+	private static final int NOTIF_ID = 1234;									// ID for notification manager
+	private static NotificationManager notifManager;							// Notification Manager
+	private static Timer timer;													// Timer used for repeating schedules
+	private static Date date = new Date();										// Date required for Timer
+	//private static long day = 86400000;										// The length of one day in milliseconds
+	private static long minute =  60000;										// The length of one minute in milliseconds
+	private static int count = 0, mHour = 12, mMinute = 0;						// Initialize counter
+																				// Initialize hour and minute for the Date
+																				// Notifications
+	private static boolean notifOn = true, flashOn = true, vibrateOn = true;	// Initialize flags
+	private final IBinder mBinder = new LocalBinder();							// Create a local binder for this service
+	private InvDBAdapter adapter = new InvDBAdapter(this);						// Create an adapter to link to database
+	private ArrayList <Item> l;													// Stores the list of Items in the inventory
 
-
+	// Class to encapsulate the task to run
+	private class task extends TimerTask {
+			@Override
+			public void run(){
+				showNotification();
+			}
+	}
+			
 	// Returns this service to the activity and allows for binding
 	// the activity to this service.
 	public class LocalBinder extends Binder{
@@ -52,24 +61,35 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 	
 	// Called after the service has been created and begins running
 	public int onStartCommand(Intent intent, int flags, int startid){
+		// Log that the service ran the onStartCommand
 		Log.d(TAG, "onStartCommand");
 		
-		Toast.makeText(this, "Notification Service Started.", Toast.LENGTH_SHORT).show();
+		// Notify that the service has started
+		if(debug)
+			Toast.makeText(this, "Notification Service Started.", Toast.LENGTH_SHORT).show();
 		
-		// Begin checking the database
+		// Create a schedule for checking the database
 		startschedule();
 		
 		// START_STICKY allows the service to be toggled on and off
 		return START_STICKY;
 	}
 	
+	// Called when the service ends
 	@Override
 	public void onDestroy(){
+		// Log that the service has terminated
 		Log.d(TAG, "onDestroy");
+		
 		// Cancel the persistent notification
 		notifManager.cancel(NOTIF_ID);
+		
+		// Cancel the schedule
 		timer.cancel();
-		Toast.makeText(this, "Notification Service Stopped.", Toast.LENGTH_SHORT).show();
+		
+		// Notify that the service has terminated
+		if(debug)
+			Toast.makeText(this, "Notification Service Stopped.", Toast.LENGTH_SHORT).show();
 	}
 	
 	// Returns a binder to this service.
@@ -80,14 +100,13 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 	
 	// Creates the schedule for checking the database.
 	private void startschedule(){
-		// Create a schedule at a Fixed rate to create notifications
-		timer.scheduleAtFixedRate(new TimerTask(){
-			@Override
-			public void run(){
-				showNotification();
-			}}, date, minute/15);
-	}
+		timer = new Timer("notificationTimer", true);
 		
+		// Create a schedule at a Fixed rate to check the database and create notifications
+		timer.scheduleAtFixedRate(new task(), date, minute);
+	}
+	
+	// Update local preferences from shared preferences
 	private void LoadPreferences(){
 		SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 		flashOn = sharedPreferences.getBoolean("LED", true);
@@ -95,19 +114,24 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 		notifOn = sharedPreferences.getBoolean("Notifications", true);
 		mHour = sharedPreferences.getInt("Hour", 12);
 		mMinute = sharedPreferences.getInt("Minute", 0);
-		mDay = sharedPreferences.getInt("Days", 5);
 	}
 	
 	// Checks the database then creates and pushes notifications and alerts to the android.
 	public void showNotification(){
+		// Load the shared preferences
 		LoadPreferences();
+		String s;
+		// Open the database adapter
 		adapter.open();
-		l = adapter.fetchAll();
+		
+		s = adapter.fetchAll(5);
+		// BROKEN: fetch all of the items about to expire
+		//l = new ArrayList <Item> (adapter.fetchAll());
+		
+		// Close the database adapter
 		adapter.close();
-		count = l.size();
+		
 		if(notifOn){
-			String s = /*l.get(0).getExp() + " " + l.get(1).getExp()*/ " ";
-
 			Notification note = new Notification(R.drawable.icon, "Food Expiring", System.currentTimeMillis());
 
 			PendingIntent in = PendingIntent.getActivity(this, 0, new Intent(this, PantryProtectorActivity.class), 0);
@@ -137,6 +161,21 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 			
 			notifManager.notify(NOTIF_ID, note);
 			
+		}
+		if (date.getHours() != mHour || date.getMinutes() != mMinute){
+			System.out.println("Original Schedule: " 
+					+ date.getDay() + "," 
+					+ date.getHours() + ":" 
+					+ date.getMinutes());
+			date = new Date();
+			date.setHours(mHour);
+			date.setMinutes(mMinute);
+			timer.cancel();
+			System.out.println("Changed Schedule: " 
+								+ date.getDay() + "," 
+								+ date.getHours() + ":" 
+								+ date.getMinutes());
+			startschedule();
 		}
 	}
 }
