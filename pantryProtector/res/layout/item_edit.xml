@@ -18,7 +18,7 @@
 	    <Button android:id="@+id/pickDate"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="Change the date"/> 
+	        android:text="Set Expiration Date"/> 
 	</LinearLayout>
 	<EditText android:layout_height="wrap_content" android:id="@+id/edit_summary" android:layout_width="fill_parent" android:hint="Summary">
 		<requestFocus></requestFocus>

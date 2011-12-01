@@ -1,13 +1,18 @@
 package us.food4thought.pantryprotect;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Vector;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-public class InvDBAdapter {
+public class InvDBAdapter implements IDebugSwitch{
 
 	// Database fields
 	public static final String KEY_ROWID = "_id";
@@ -213,19 +218,85 @@ public class InvDBAdapter {
 		return values;
 	}
 	
+	public String fetchAll(int day){
+		int count = 0;
+		String data = "00";
+		String [] s = new String[] {KEY_DESCRIPTION, KEY_EXPIRATION, KEY_SUMMARY, KEY_CATEGORY};
+		Cursor cursor = database.query(DATABASE_TABLE, s, null, null, null, null, null);
+		cursor.moveToFirst();
+		final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int d = c.get(Calendar.DAY_OF_MONTH);
+		while(!cursor.isAfterLast()){
+			String exp = cursor.getString(cursor.getColumnIndex(s[1]));
+			Integer month2;
+			Integer d2;
+			Integer year2;
+			int i = exp.indexOf('-');
+			month2 = Integer.parseInt(exp.substring(0, i));
+			int i2 = exp.indexOf('-', 3);
+			d2 = Integer.parseInt(exp.substring(i + 1, i2));
+			year2 = Integer.parseInt(exp.substring(i2 + 1, exp.length() - 1));
+			//System.out.println(exp);
+			if (debug) System.out.println(month2 + "-" + d2 + "-" + year2 + "\t" + month + "-" + d + "-" + year);
+			if (year2 == year){
+				if (month2 == month){
+					if (d2 - d <= day){
+						count++;
+						if (d2 - d <= 0){
+							data = "11";
+						}
+					}
+				}
+				else if(month2 < month){
+					count++;
+					data = "11";
+				}
+				else if(month2 > month){
+					if(d - d2 > 26){
+						count++;
+					}
+				}
+			}
+			else if(year2 > year){
+				if(month2 == 1 && month == 12){
+					if(d - d2 > 26){
+						count++;
+					}
+				}
+			}
+			else if(year2 < year){
+				count++;
+				data = "11";
+			}
+			cursor.moveToNext();
+		}
+		data = data + count;
+		return data;
+	}
+	
+	// Method has pointer errors, requires fixing
+	/*
 	public ArrayList <Item> fetchAll(){
 		ArrayList <Item> l = new ArrayList<Item>();
 		String [] s = new String[] {KEY_DESCRIPTION, KEY_EXPIRATION, KEY_SUMMARY, KEY_CATEGORY};
 		Cursor cursor = database.query(DATABASE_TABLE, s, null, null, null, null, null);
 		cursor.moveToFirst();
 		while(!cursor.isAfterLast()){
-			String name = cursor.getString(cursor.getColumnIndex(InvDBAdapter.KEY_SUMMARY));
-			String exp = cursor.getString(cursor.getColumnIndex(InvDBAdapter.KEY_EXPIRATION));
+			final String exp = cursor.getString(1);
+			final String name = cursor.getString(2);
 			l.add(new Item(name, exp, " ", " ", " "));
+			for (int i = 0; i < l.size(); i++){
+				System.out.println(l.get(i).getName());
+			}
+			
 			cursor.moveToNext();
 		}
+		
 		return l;
 	}
+	*/
 	
 	/*Return a Cursor over the list of all items in the database * * @return Cursor over all notes */
 

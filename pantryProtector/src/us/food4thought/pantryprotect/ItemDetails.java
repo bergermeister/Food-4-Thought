@@ -89,9 +89,10 @@ public class ItemDetails extends Activity {
 		// add a click listener to the Confirm button
 		confirmButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				saveState();
-				setResult(RESULT_OK);
-				finish();
+				if (saveState()){
+					setResult(RESULT_OK);
+					finish();
+				}
 			}
 
 		});
@@ -179,15 +180,22 @@ public class ItemDetails extends Activity {
 		populateFields();
 	}
 
-	private void saveState() {
+	private void noSummary(){
+		Toast.makeText(this, "Please enter the name of the Item into the Summary Field", Toast.LENGTH_SHORT).show();
+	}
+	
+	private boolean saveState() {
 		Cursor temp = (Cursor) mCategory.getSelectedItem();
 		String category = temp.getString(temp.getColumnIndex(InvDBAdapter.KEY_SUMMARY));
 		String summary = mTitleText.getText().toString();
 		String description = mBodyText.getText().toString();
         String expiration = mDateDisplay.getText().toString();
-        
+        System.out.println(summary);
         Toast.makeText(getApplicationContext(), category, 2000);
-		
+		if (summary == null|| summary.equals("")){
+			noSummary();
+			return false;
+		}
 
 		if (mRowId == null || scan) {
 			long id = mDbHelper.createItem(category, summary, description, expiration);
@@ -197,5 +205,7 @@ public class ItemDetails extends Activity {
 		} else {
 			mDbHelper.updateItem(mRowId, category, summary, description, expiration);
 		}
+		
+		return true;
 	}
 }

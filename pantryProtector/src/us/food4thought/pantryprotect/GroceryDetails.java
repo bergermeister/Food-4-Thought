@@ -82,9 +82,10 @@ public class GroceryDetails extends Activity {
 		// add a click listener to the Confirm button
 		confirmButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				saveState();
-				setResult(RESULT_OK);
-				finish();
+				if(saveState()){
+					setResult(RESULT_OK);
+					finish();
+				}
 			}
 
 		});
@@ -171,8 +172,8 @@ public class GroceryDetails extends Activity {
 		super.onResume();
 		populateFields();
 	}
-
-	private void saveState() {
+	
+	private boolean saveState() {
 		Cursor temp = (Cursor) mCategory.getSelectedItem();
 		String category = temp.getString(temp.getColumnIndex(InvDBAdapter.KEY_SUMMARY));
 		String summary = mTitleText.getText().toString();
@@ -180,7 +181,11 @@ public class GroceryDetails extends Activity {
         String expiration = mDateDisplay.getText().toString();
         
         Toast.makeText(getApplicationContext(), category, 2000);
-		
+
+		if (summary == null|| summary.equals("")){
+			Toast.makeText(this, "Please enter the name of the Item into the Summary Field", Toast.LENGTH_SHORT).show();
+			return false;
+		}
 
 		if (mRowId == null) {
 			long id = mDbHelper.createGList(category, summary, description, expiration);
@@ -190,5 +195,6 @@ public class GroceryDetails extends Activity {
 		} else {
 			mDbHelper.updateGrocery(mRowId, category, summary, description, expiration);
 		}
+		return true;
 	}
 }

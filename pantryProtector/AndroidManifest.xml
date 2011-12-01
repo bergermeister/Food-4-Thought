@@ -27,6 +27,7 @@
 		<activity android:name=".ScanActivity"></activity>
         <activity android:name=".LocationDetails" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
         <activity android:name=".GroceryDetails" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
+        <activity android:name=".CookBook" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
 
     </application>
 </manifest>
