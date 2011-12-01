@@ -28,6 +28,11 @@
         <activity android:name=".LocationDetails" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
         <activity android:name=".GroceryDetails" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
         <activity android:name=".CookBook" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
+        <activity android:name=".Ingredients" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
+        <activity android:name=".RecipeList" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
+        <activity android:name=".RecipeAdd" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
+ 		<activity android:name=".RecipeDisplay" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
+ 		<activity android:name=".RecipeDetails" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
 
     </application>
 </manifest>
