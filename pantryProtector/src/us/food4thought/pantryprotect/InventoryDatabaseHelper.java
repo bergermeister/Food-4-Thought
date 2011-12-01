@@ -21,6 +21,10 @@ public class InventoryDatabaseHelper extends SQLiteOpenHelper {
 	// Create database for grocery list items
 	private static final String GLIST_CREATE = "create table glist (_id integer primary key autoincrement, "
 			+ "category text not null, summary text not null, description text not null, expiration text not null);";
+	
+	// Create database for meal plan items
+	private static final String MEALS_CREATE = "create table mealplans (_id text primary key, "
+			+ "recipe_id text);";
 
 	// Constructor
 	public InventoryDatabaseHelper(Context context) {
@@ -33,6 +37,7 @@ public class InventoryDatabaseHelper extends SQLiteOpenHelper {
 		database.execSQL(LOCATION_CREATE);
 		database.execSQL(DATABASE_CREATE);
 		database.execSQL(GLIST_CREATE);
+		database.execSQL(MEALS_CREATE);
 	}
 
 	// Method is called during an upgrade of the database, e.g. if you increase
@@ -45,6 +50,8 @@ public class InventoryDatabaseHelper extends SQLiteOpenHelper {
 						+ newVersion + ", which will destroy all old data");
 		database.execSQL("DROP TABLE IF EXISTS item");
 		database.execSQL("DROP TABLE IF EXISTS location");
+		database.execSQL("DROP TABLE IF EXISTS glist");
+		database.execSQL("DROP TABLE IF EXISTS mealplans");
 		onCreate(database);
 	}
 }

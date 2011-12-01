@@ -5,12 +5,14 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.DatePicker;
+import android.widget.SimpleCursorAdapter;
 
 public class MealListActivity extends ListActivity {
 
@@ -22,10 +24,11 @@ public class MealListActivity extends ListActivity {
                                       int month, int day) {
                 	Time parser = new Time();
                 	parser.set(day, month, year);
-                	if(!mDatabase.dateExists(Time.getJulianDay(parser.toMillis(true), parser.gmtoff)))
-                		createNewMeal(year, month, day);
+                	String mealID = parser.format("EEEE, MMM dd, yyyy");
+                	if(!mDatabase.dateExists(mealID))
+                		startViewMeal(MEAL_CREATE, mealID);
                 	else
-                		editMeal(Time.getJulianDay(parser.toMillis(true), parser.gmtoff));
+                		startViewMeal(MEAL_EDIT, mealID);
                 }
             };
     
@@ -39,6 +42,20 @@ public class MealListActivity extends ListActivity {
     	super.onCreate(savedInstanceState);
     	
     	setContentView(R.layout.meal_list);
+    	
+    	// connect to the database
+    	mDatabase = new InvDBAdapter(this);
+    	mDatabase.open();
+    	
+    	// load existing meal plans into the list
+    	fillData();
+    }
+    
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	
+    	mDatabase.close();
     }
 	
 	@Override
@@ -73,15 +90,36 @@ public class MealListActivity extends ListActivity {
 	    return null;
 	}
 	
-	private void createNewMeal(int year, int month, int day) {
-		Intent i = new Intent().setClass(this, MealViewActivity.class);
-		i.putExtra("_year", year);
-		i.putExtra("_month", month);
-		i.putExtra("_day", day);
-		startActivityForResult(i, MEAL_CREATE);
+	private void fillData() {
+		// fetch all the meals from the database
+		Cursor cursor = mDatabase.fetchAllMeals();
+		startManagingCursor(cursor);
+		
+		// set the to and from fields
+		String[] from = new String[] { InvDBAdapter.KEY_ROWID };
+		int[] to = new int[] { R.id.label };
+		
+		// set up the adapter
+		SimpleCursorAdapter notes = new SimpleCursorAdapter(this, R.layout.meal_list_row, cursor, from, to);
+		setListAdapter(notes);
 	}
 	
-	private void editMeal(long mealID) {
+	private void startViewMeal(int accessMethod, String mealID) {
+		Intent i = new Intent().setClass(this, MealViewActivity.class);
+		i.putExtra(InvDBAdapter.KEY_ROWID, mealID);
+		startActivityForResult(i, accessMethod);
+	}
+	
+	// Called with the result of the other activity
+	// requestCode was the origin request code send to the activity
+	// resultCode is the return code, 0 is everything is ok
+	// intend can be use to get some data from the caller
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode,
+			Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
 		
+		// update the list with changes
+		fillData();
 	}
 }

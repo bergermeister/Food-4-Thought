@@ -264,7 +264,7 @@ public class InventoryActivity extends ListActivity {
 				}
 			}
 			if( !alreadyExists ) {
-				firstChars.add(firstChar);
+				firstChars.add(firstChar.toUpperCase());
 			}
 			cursor.moveToNext();
 		}

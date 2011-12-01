@@ -7,7 +7,7 @@
     <string name="scan_text">Scan Now</string>
     <string name="skip_text">Skip</string>
     <string name="abort_text">Abort</string>
-    <string name="no_items">There are no items in the inventory</string>
+    <string name="no_items">There are no items in the list</string>
 	<string name="menu_insert">Add Item</string>
 	<string name="menu_delete">Delete Item</string>
 	<string name="item_summary">Summary</string>

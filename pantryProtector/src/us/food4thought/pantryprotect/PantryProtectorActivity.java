@@ -62,6 +62,11 @@ public class PantryProtectorActivity extends TabActivity {
         spec = tabHost.newTabSpec("glist").setIndicator("Grocery List", res.getDrawable(R.drawable.ic_tab_inv)).setContent(intent);
         tabHost.addTab(spec);
         
+        // Create an intent to launch the Meal List, add an icon to its tab with spec, add the tab linked to Meal List
+        intent = new Intent().setClass(this, MealListActivity.class);
+        spec = tabHost.newTabSpec("meals").setIndicator("Meals").setContent(intent);
+        tabHost.addTab(spec);
+        
         // Create an intent to launch the OptionsActivity, add an icon to its tab with spec, add the tab linked to OptionsActivity
         intent = new Intent().setClass(this, OptionsActivity.class);
         spec = tabHost.newTabSpec("opts").setIndicator("Options", res.getDrawable(R.drawable.ic_tab_opts)).setContent(intent);

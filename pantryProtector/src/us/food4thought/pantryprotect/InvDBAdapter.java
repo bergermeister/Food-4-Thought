@@ -1,11 +1,6 @@
 package us.food4thought.pantryprotect;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Vector;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -20,9 +15,14 @@ public class InvDBAdapter implements IDebugSwitch{
 	public static final String KEY_SUMMARY = "summary";
 	public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_EXPIRATION = "expiration";
+    public static final String KEY_RECIPE_LIST = "recipe_id";
+    public static final String KEY_INGREDIENTS = "item_id";
+    public static final String KEY_INSTRUCTIONS = "details";
 	private static final String DATABASE_TABLE = "item";
 	private static final String LOCATION_TABLE = "location";
 	private static final String GLIST_TABLE = "glist";
+	private static final String MEALS_TABLE = "mealplans";
+	private static final String RECIPE_TABLE = "recipes";
 	private Context context;
 	private SQLiteDatabase database;
 	private InventoryDatabaseHelper dbHelper;
@@ -339,5 +339,50 @@ public class InvDBAdapter implements IDebugSwitch{
 			mCursor.moveToFirst();
 		}
 		return mCursor;
+	}
+	
+	/**
+	 * methods for meal plans
+	 **/
+
+	// test if a meal plan date already exists in the database
+	public boolean dateExists(String dateID) throws SQLException {
+		Cursor mCursor = database.query(MEALS_TABLE, new String[] { KEY_ROWID, KEY_RECIPE_LIST }, KEY_ROWID + "=" + dateID, null, null, null, null);
+		if(mCursor == null || mCursor.getCount() < 1)
+			return false;
+		else
+			return true;
+	}
+
+	// return a cursor of all meals in the database
+	public Cursor fetchAllMeals() throws SQLException {
+		Cursor mCursor = database.query(MEALS_TABLE, new String[] { KEY_ROWID, KEY_RECIPE_LIST }, null, null, null, null, null);
+		if(mCursor != null) {
+			mCursor.moveToFirst();
+		}
+		return mCursor;
+	}
+
+	// return a cursor of the specified meal
+	public Cursor fetchMeal(String mealID) {
+		Cursor mCursor = database.query(MEALS_TABLE, new String[] { KEY_ROWID, KEY_RECIPE_LIST }, KEY_ROWID + "=" + mealID, null, null, null, null);
+		if(mCursor != null) {
+			mCursor.moveToFirst();
+		}
+		return mCursor;
+	}
+	
+	/**
+	 * methods for recipes
+	 */
+	
+	public Cursor fetchRecipe(long rowId) throws SQLException {
+		Cursor mCursor = database.query(RECIPE_TABLE, new String[] { KEY_ROWID, KEY_SUMMARY, KEY_INGREDIENTS, KEY_INSTRUCTIONS }, KEY_ROWID + "=" + rowId, null, null,
+				null, null);
+		if(mCursor != null) {
+			mCursor.moveToFirst();
+		}
+		return mCursor;
+			
 	}
 }
