@@ -22,7 +22,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TabHost;
 
-public class PantryProtectorActivity extends TabActivity {
+public class CookBook extends TabActivity {
 	
 	public static int expired = 5;
 	private InvDBAdapter mDbHelper = new InvDBAdapter(this);
@@ -31,59 +31,24 @@ public class PantryProtectorActivity extends TabActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {  	
         super.onCreate(savedInstanceState);
-        
-        // Set the view to the main.xml layout
         setContentView(R.layout.main);
-        
-        // Sets aside resources for this application
         Resources res = getResources();
-        
-        // Create a host variable for tabs
         TabHost tabHost = getTabHost();
-        
-        // Create a spec variable for each tab
         TabHost.TabSpec spec;
-        
-        // Create an intent, this will be used for each activity that corresponds to the tab being created
         Intent intent;
         
-        // Create an intent to launch the ScanActivity, add an icon to its tab with spec, add the tab linked to ScanActivity
-        intent = new Intent().setClass(this, ScanActivity.class);
-        spec = tabHost.newTabSpec("scan").setIndicator("Scan", res.getDrawable(R.drawable.ic_tab_scan)).setContent(intent);
+        intent = new Intent().setClass(this, Ingredients.class);
+        spec = tabHost.newTabSpec("inv").setIndicator("Ingredients", res.getDrawable(R.drawable.ic_tab_inv)).setContent(intent);
         tabHost.addTab(spec);
         
-        // Create an intent to launch the Inventory, add an icon to its tab with spec, add the tab linked to Inventory
-        intent = new Intent().setClass(this, InventoryActivity.class);
-        spec = tabHost.newTabSpec("inv").setIndicator("Inventory", res.getDrawable(R.drawable.ic_tab_inv)).setContent(intent);
+        intent = new Intent().setClass(this, RecipeList.class);
+        spec = tabHost.newTabSpec("inv").setIndicator("Recipes", res.getDrawable(R.drawable.ic_tab_inv)).setContent(intent);
         tabHost.addTab(spec);
         
-        // Create an intent to launch the Grocery List, add an icon to its tab with spec, add the tab linked to Grocery List
-        intent = new Intent().setClass(this, GListActivity.class);
-        spec = tabHost.newTabSpec("glist").setIndicator("Grocery List", res.getDrawable(R.drawable.ic_tab_inv)).setContent(intent);
-        tabHost.addTab(spec);
         
-        intent = new Intent().setClass(this, CookBook.class);
-        spec = tabHost.newTabSpec("opts").setIndicator("Cook Book", res.getDrawable(R.drawable.ic_tab_opts)).setContent(intent);
-        tabHost.addTab(spec);
-        
-        // Create an intent to launch the Meal List, add an icon to its tab with spec, add the tab linked to Meal List
-        intent = new Intent().setClass(this, MealListActivity.class);
-        spec = tabHost.newTabSpec("meals").setIndicator("Meals").setContent(intent);
-        tabHost.addTab(spec);
-        
-        // Create an intent to launch the OptionsActivity, add an icon to its tab with spec, add the tab linked to OptionsActivity
-        intent = new Intent().setClass(this, OptionsActivity.class);
-        spec = tabHost.newTabSpec("opts").setIndicator("Options", res.getDrawable(R.drawable.ic_tab_opts)).setContent(intent);
-        tabHost.addTab(spec);
-        
-        // Initializes the current tab to ScanActivity
         tabHost.setCurrentTab(0);
-        
-        // Start the notification service
-    	startService(new Intent(PantryProtectorActivity.this, PantryProtectorLocalService.class));
     }
     
-    // Controller class, can be used to listen to and communicate with Services running
     public static class Controller extends Activity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
