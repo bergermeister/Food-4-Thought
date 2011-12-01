@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="us.food4thought.pantryprotect"
       android:versionCode="1"
-      android:versionName="1.0">
+      android:versionName="1.0" package="us.food4thought.pantryprotect">
     <uses-sdk android:minSdkVersion="8" />
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
@@ -33,6 +32,8 @@
         <activity android:name=".RecipeAdd" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
  		<activity android:name=".RecipeDisplay" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
  		<activity android:name=".RecipeDetails" android:windowSoftInputMode="stateVisible|adjustResize"></activity>
+ 		<activity android:name=".MealListActivity"></activity>
+ 		<activity android:name=".MealViewActivity"></activity>
 
     </application>
 </manifest>

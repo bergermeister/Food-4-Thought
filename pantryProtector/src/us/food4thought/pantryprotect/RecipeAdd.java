@@ -1,20 +1,11 @@
 package us.food4thought.pantryprotect;
 
-import java.util.Calendar;
-
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class RecipeAdd extends Activity {
@@ -22,10 +13,7 @@ public class RecipeAdd extends Activity {
 	private EditText mBodyText;
 	private Long mRowId;
 	private InvDBAdapter mDbHelper;
-	private Spinner mCategory;
-	private TextView mDateDisplay;
-	private int mYear, mMonth, mDay;
-	private Button mPickDate, confirmButton, cancelButton;
+	private Button confirmButton, cancelButton;
 	private boolean scan = false;
 	/*private DatePickerDialog.OnDateSetListener mDateSetListener =
             new DatePickerDialog.OnDateSetListener() {

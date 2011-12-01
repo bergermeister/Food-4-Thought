@@ -26,7 +26,7 @@ public class InventoryDatabaseHelper extends SQLiteOpenHelper {
 	private static final String MEALS_CREATE = "create table mealplans (_id text primary key, "
 			+ "recipe_id text);";
 	
-	private static final String RECIPES_CREATE = "create table recipenames (_id integer primary key autoincrement, "
+	private static final String RECIPES_CREATE = "create table recipes (_id integer primary key autoincrement, "
 			+ "summary text not null, description text not null);";
 
 
@@ -57,7 +57,7 @@ public class InventoryDatabaseHelper extends SQLiteOpenHelper {
 		database.execSQL("DROP TABLE IF EXISTS location");
 		database.execSQL("DROP TABLE IF EXISTS glist");
 		database.execSQL("DROP TABLE IF EXISTS mealplans");
-		database.execSQL("DROP TABLE IF EXISTS recipenames");
+		database.execSQL("DROP TABLE IF EXISTS recipes");
 		onCreate(database);
 	}
 }

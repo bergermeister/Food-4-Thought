@@ -1,7 +1,5 @@
 package us.food4thought.pantryprotect;
 
-import java.util.ArrayList;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,21 +12,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Spinner;
 
 public class RecipeList extends ListActivity {
 	private InvDBAdapter helper;							// database access
 	private static final int ACTIVITY_CREATE = 0;			// key: creating new item
 	private static final int ACTIVITY_EDIT = 1;				// key: editing pre-existing item
-	private static final int LOCATION_MANAGE = 2;			// key: creating or deleting location
 	private static final int DELETE_ID = Menu.FIRST + 1;
 	private Cursor cursor;
-	private Spinner recs;
-	private static ArrayList<String> recipes = new ArrayList<String>();
-	private static final String[] strArray = new String[] {};	// empty string array for casting purposes
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,7 +70,7 @@ public class RecipeList extends ListActivity {
 		case DELETE_ID:
 			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 					.getMenuInfo();
-			helper.deleteItem(info.id);
+			helper.deleteRecipe(info.id);
 			fillData();
 			return true;
 		}

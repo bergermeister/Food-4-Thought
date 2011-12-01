@@ -124,7 +124,10 @@ public final class R {
         public static final int number_picker_pref=0x7f03000f;
         public static final int numberpicker_dialog=0x7f030010;
         public static final int options=0x7f030011;
-        public static final int scan=0x7f030012;
+        public static final int recipe_display=0x7f030012;
+        public static final int recipe_edit=0x7f030013;
+        public static final int recipe_item=0x7f030014;
+        public static final int scan=0x7f030015;
     }
     public static final class raw {
         public static final int config=0x7f040000;

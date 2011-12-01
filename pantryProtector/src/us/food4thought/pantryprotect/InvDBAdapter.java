@@ -54,8 +54,8 @@ public class InvDBAdapter implements IDebugSwitch{
 /*Create a new food item If the food item is successfully created return the new * rowId for that note, otherwise return a -1 to indicate failure. */
 
 	public long createItem(String category, String summary, String description, String expiration) {
-		ContentValues initialValues = createContentValues2(category, summary,
-				description, expiration, "0");
+		ContentValues initialValues = createContentValues(category, summary,
+				description, expiration);
 
 		return database.insert(DATABASE_TABLE, null, initialValues);
 	}
@@ -65,8 +65,8 @@ public class InvDBAdapter implements IDebugSwitch{
 
 	public boolean updateItem(long rowId, String category, String summary,
 			String description, String expiration) {
-		ContentValues updateValues = createContentValues2(category, summary,
-				description, expiration, "0");
+		ContentValues updateValues = createContentValues(category, summary,
+				description, expiration);
 
 		return database.update(DATABASE_TABLE, updateValues, KEY_ROWID + "="
 				+ rowId, null) > 0;
@@ -89,7 +89,7 @@ public class InvDBAdapter implements IDebugSwitch{
 				WHERE = KEY_SUMMARY + " like '" + filter_by + "%'";
 			}
 			return database.query(DATABASE_TABLE, new String[] { KEY_ROWID,
-					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION, KEY_RECIPE }, WHERE, null, null,
+					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, WHERE, null, null,
 					null, KEY_SUMMARY + " ASC");
 		} else if( order_by.equalsIgnoreCase("Location") ) {
 			String WHERE = null;
@@ -97,15 +97,15 @@ public class InvDBAdapter implements IDebugSwitch{
 				WHERE = KEY_CATEGORY + "='" + filter_by + "'";
 			}
 			return database.query(DATABASE_TABLE, new String[] { KEY_ROWID,
-					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION, KEY_RECIPE }, WHERE, null, null,
+					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, WHERE, null, null,
 					null, KEY_CATEGORY + " ASC");
 		} else if( order_by.equalsIgnoreCase("Expiration Date") ) {
 			return database.query(DATABASE_TABLE, new String[] { KEY_ROWID,
-					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION, KEY_RECIPE }, null, null, null,
+					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, null, null, null,
 					null, KEY_EXPIRATION + " ASC");
 		} else {
 			return database.query(DATABASE_TABLE, new String[] { KEY_ROWID,
-					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION, KEY_RECIPE }, null, null, null,
+					KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION }, null, null, null,
 					null, null);
 		}
 	}
@@ -136,7 +136,7 @@ public class InvDBAdapter implements IDebugSwitch{
 
 	public Cursor fetchItem(long rowId) throws SQLException {
 		Cursor mCursor = database.query(true, DATABASE_TABLE, new String[] {
-				KEY_ROWID, KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION, KEY_RECIPE },
+				KEY_ROWID, KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION, KEY_EXPIRATION },
 				KEY_ROWID + "=" + rowId, null, null, null, null, null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
@@ -161,7 +161,7 @@ public class InvDBAdapter implements IDebugSwitch{
 		values.put(KEY_SUMMARY, summary);
 		values.put(KEY_DESCRIPTION, description);
 		values.put(KEY_EXPIRATION, expiration);
-		values.put(KEY_RECIPE, recipe);
+		values.put(KEY_RECIPES, recipe);
 		return values;
 	}
 	/*
@@ -352,16 +352,38 @@ public class InvDBAdapter implements IDebugSwitch{
 	}
 	
 	/**
-	 * methods for meal plans
+	 * Meal Plans
+	 * - ROWID = date based identification string
+	 * - RECIPE_LIST = delimited string of recipe identification numbers
 	 **/
 
 	// test if a meal plan date already exists in the database
 	public boolean dateExists(String dateID) throws SQLException {
-		Cursor mCursor = database.query(MEALS_TABLE, new String[] { KEY_ROWID, KEY_RECIPE_LIST }, KEY_ROWID + "=" + dateID, null, null, null, null);
+		Cursor mCursor = database.query(MEALS_TABLE, new String[] { KEY_ROWID, KEY_RECIPE_LIST }, KEY_ROWID + "='" + dateID + "'", null, null, null, null);
 		if(mCursor == null || mCursor.getCount() < 1)
 			return false;
 		else
 			return true;
+	}
+	
+	// creates a new meal plan and return the rowID if successful
+	public long createMeal(String dateID, String recipeList) throws SQLException {
+		ContentValues initialValues = createMealValues(dateID, recipeList);
+		
+		return database.insert(MEALS_TABLE, null, initialValues );
+	}
+	
+	// updates an existing meal plan
+	public boolean updateMeal(String dateID, String recipeList) throws SQLException {
+		ContentValues updateValues = createMealValues(dateID, recipeList);
+
+		return database.update(MEALS_TABLE, updateValues, KEY_ROWID + "='"
+				+ dateID + "'", null) > 0;
+	}
+	
+	// deletes an existing meal plan
+	public boolean deleteMeal(String dateID) {
+		return database.delete(MEALS_TABLE, KEY_ROWID + "='" + dateID + "'", null) > 0;
 	}
 
 	// return a cursor of all meals in the database
@@ -375,11 +397,18 @@ public class InvDBAdapter implements IDebugSwitch{
 
 	// return a cursor of the specified meal
 	public Cursor fetchMeal(String mealID) {
-		Cursor mCursor = database.query(MEALS_TABLE, new String[] { KEY_ROWID, KEY_RECIPE_LIST }, KEY_ROWID + "=" + mealID, null, null, null, null);
+		Cursor mCursor = database.query(MEALS_TABLE, new String[] { KEY_ROWID, KEY_RECIPE_LIST }, KEY_ROWID + "='" + mealID + "'", null, null, null, null);
 		if(mCursor != null) {
 			mCursor.moveToFirst();
 		}
 		return mCursor;
+	}
+	
+	private ContentValues createMealValues(String dateID, String recipeList) {
+		ContentValues values = new ContentValues();
+		values.put(KEY_ROWID, dateID);
+		values.put(KEY_RECIPE_LIST, recipeList);
+		return values;
 	}
 	
 	/**

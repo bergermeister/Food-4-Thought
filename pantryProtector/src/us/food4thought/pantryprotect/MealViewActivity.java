@@ -6,14 +6,13 @@ import android.app.ListActivity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-class MealViewActivity extends ListActivity {
+public class MealViewActivity extends ListActivity {
 	
 	private InvDBAdapter mDatabase;
 	private String mMealID;
-	private String[] recipeID;
+	private ArrayList<String> recipeID;
 	private ArrayList<String> recipeText;
 	
 	@Override
@@ -31,6 +30,9 @@ class MealViewActivity extends ListActivity {
 		// set the display text to the meal date (ID)
 		TextView dateTitle = (TextView) findViewById(R.id.meal_date);
 		dateTitle.setText(mMealID);
+		
+		// populate the list
+		fillData();
 	}
 	
 	@Override
@@ -46,17 +48,44 @@ class MealViewActivity extends ListActivity {
 		startManagingCursor(cursor);
 
 		if(cursor != null) {
-			// parse out recipe IDs
-			recipeID = cursor.getString(cursor.getColumnIndex(InvDBAdapter.KEY_RECIPE_LIST)).split(":");
-			recipeText.clear();
-			for(int i = 0; i < recipeID.length; i++) {
-				Cursor iCursor = mDatabase.fetchRecipe(Integer.parseInt(recipeID[i]));
-				recipeText.add(i, iCursor.getString(iCursor.getColumnIndex(InvDBAdapter.KEY_SUMMARY)));
-			}
+			String recipeString = cursor.getString(cursor.getColumnIndex(InvDBAdapter.KEY_RECIPE_LIST));
+			if(recipeString != null) {
+				// parse out recipe IDs
+				String[] recipeParser = recipeString.split(":");
+				recipeID = new ArrayList<String>();
+				for(int i = 0; i < recipeParser.length; i++) {
+					recipeID.add(recipeParser[i]);				
+				}
+				recipeText.clear();
+				for(int i = 0; i < recipeID.size(); i++) {
+					Cursor iCursor = mDatabase.fetchRecipe(Integer.parseInt((String) recipeID.toArray()[i]));
+					recipeText.add(i, iCursor.getString(iCursor.getColumnIndex(InvDBAdapter.KEY_SUMMARY)));
+				}
 
-			// set up the adapter
-			ArrayAdapter<String> notes = new ArrayAdapter<String>(this, R.layout.meal_list_row, (String[]) recipeText.toArray());
-			setListAdapter(notes);
+				// set up the adapter
+				updateData();
+			}
+		}
+	}
+	
+	private void updateData() {
+		// refresh the list view
+		ArrayAdapter<String> notes = new ArrayAdapter<String>(this, R.layout.meal_list_row, (String[]) recipeText.toArray());
+		setListAdapter(notes);
+	}
+	
+	private void saveToDatabase() {
+		String formatRecipeList = "";
+		for(int i = 0; i < recipeID.size(); i++) {
+			if(i != 0)
+				formatRecipeList += ":";
+			formatRecipeList += recipeID.toArray()[i];
+		}
+		
+		if(mDatabase.dateExists(mMealID)) {
+			mDatabase.updateMeal(mMealID, formatRecipeList);
+		} else {
+			mDatabase.createMeal(mMealID, formatRecipeList);
 		}
 	}
 }

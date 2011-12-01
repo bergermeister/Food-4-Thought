@@ -1,18 +1,23 @@
 package us.food4thought.pantryprotect;
 
 import java.util.Calendar;
+import java.util.Date;
+
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.text.format.Time;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.TextView;
 
 public class MealListActivity extends ListActivity {
 
@@ -22,9 +27,8 @@ public class MealListActivity extends ListActivity {
 
                 public void onDateSet(DatePicker view, int year, 
                                       int month, int day) {
-                	Time parser = new Time();
-                	parser.set(day, month, year);
-                	String mealID = parser.format("EEEE, MMM dd, yyyy");
+                	String mealID =  (String) DateFormat.format("EEEE, MMM dd, yyyy",
+                			new Date(year, month, day));
                 	if(!mDatabase.dateExists(mealID))
                 		startViewMeal(MEAL_CREATE, mealID);
                 	else
@@ -33,6 +37,7 @@ public class MealListActivity extends ListActivity {
             };
     
     static final int DATE_DIALOG_ID = 0;
+    private static final int DELETE_ID = Menu.FIRST + 1;
     
     static final int MEAL_CREATE = 0;
     static final int MEAL_EDIT = 1;
@@ -88,6 +93,21 @@ public class MealListActivity extends ListActivity {
             			Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 	    }
 	    return null;
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case DELETE_ID:
+			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+					.getMenuInfo();
+			ListView view = (ListView) findViewById(android.R.id.list);
+			TextView text = (TextView) view.getSelectedItem();
+			mDatabase.deleteMeal((String) text.getText());
+			fillData();
+			return true;
+		}
+		return super.onContextItemSelected(item);
 	}
 	
 	private void fillData() {
