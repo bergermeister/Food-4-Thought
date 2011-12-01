@@ -16,13 +16,20 @@ import android.widget.TextView;
 
 
 public class ScanActivity extends Activity {
+	private Button scanButton;			// Button to start scanning
+	private Button skipButton;			// Button to Skip
+	private View spinny;				// Spinning Loading bar
+	private TextView scanResult;		// Resulting UPC of the scan
 	
+	// Listener to start the bar code scanning application
 	private OnClickListener scanClick = new OnClickListener() {
 		public void onClick(View v) {
+			// Run the bar code scanner
 			zxingScan();
 		}
 	};
 	
+	// Listener for the skip button
 	private OnClickListener skipClick = new OnClickListener() {
 		public void onClick(View v) {
 			if(spinny.isShown())
@@ -30,49 +37,53 @@ public class ScanActivity extends Activity {
 		}
 	};
 	
+	// Resets the layout
 	private void resetMainMenu() {
 		scanButton.setVisibility(View.VISIBLE);
 		skipButton.setText(R.string.skip_text);
 		spinny.setVisibility(View.GONE);
 	}
 	
-	private Button scanButton;
-	private Button skipButton;
-	private View spinny;
-	private TextView scanResult;
-	
+	// Called when the activity is first created
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		// Set the view to the scan.xml layout
 		setContentView(R.layout.scan);
 		
+		// Associate variables with their equivalents in the .xml file
 		scanButton = (Button)findViewById(R.id.zxing_button);
 		skipButton = (Button)findViewById(R.id.skip_button);
 		spinny = findViewById(R.id.scanningNow);
 		scanResult = (TextView)findViewById(R.id.textView2);
 		
+		// Set the listeners for the buttons
 		scanButton.setOnClickListener(scanClick);
 		skipButton.setOnClickListener(skipClick);
 	}
 	
+	// When the application resumes, reset the layout
 	public void onResume() {
 		super.onResume();
 
 		resetMainMenu();
 	}
 	
+	// Run the bar code scanning app
 	public void zxingScan() {
 		spinny.setVisibility(View.VISIBLE);
 		scanButton.setVisibility(View.GONE);
 		skipButton.setText(R.string.abort_text);
 		
+		// Creates an intent for the third party application and launches it
 		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
         intent.setPackage("com.google.zxing.client.android");
         intent.putExtra("SCAN_MODE", "UPC_MODE");
         startActivityForResult(intent, 0);
 	}
 	
+	// Called when the bar code scanner finishes and returns its result
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 	   if (requestCode == 0) {
 	        if (resultCode != RESULT_OK) {

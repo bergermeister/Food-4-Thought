@@ -23,27 +23,33 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 public class GListActivity extends ListActivity {
-	private InvDBAdapter helper;
-	private static final int ACTIVITY_CREATE = 0;
-	private static final int ACTIVITY_EDIT = 1;
-	private static final int DELETE_ID = Menu.FIRST + 1;
-	private Cursor cursor;
-	private Spinner mSort;
-	private Spinner mFilter;
-	private static ArrayList<String> firstChars = new ArrayList<String>();
-	private static ArrayList<String> locations = new ArrayList<String>();
-	private static final String[] strArray = new String[] {};
+	private InvDBAdapter helper;											// Adapter to link to database
+	private static final int ACTIVITY_CREATE = 0;							// Flag for calling an Activity to create it
+	private static final int ACTIVITY_EDIT = 1;								// Flag for calling an Activity to edit it
+	private static final int DELETE_ID = Menu.FIRST + 1;					// 
+	private Cursor cursor;													// Cursor for iterating through database
+	private Spinner mSort;													// Spinner for sorting
+	private Spinner mFilter;												// Spinner for filtering
+	private static ArrayList<String> firstChars = new ArrayList<String>();	// Array of the first character in each item
+	private static ArrayList<String> locations = new ArrayList<String>();	// Array of locations
+	private static final String[] strArray = new String[] {};				// Array of strings
 	
+	// Called when the activity is created.
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		// Sets the view to item_list.xml and links the spinner variables to their location in the xml file
 		setContentView(R.layout.item_list);
 		mSort = (Spinner) findViewById(R.id.inv_sort);
 		mFilter = (Spinner) findViewById(R.id.inv_filter);
 		this.getListView().setDividerHeight(2);
+		
+		// Opens a link to the database
 		helper = new InvDBAdapter(this);
 		helper.open();
+		
+		// Populates the window with items
 		fillData();
 		registerForContextMenu(getListView());
 		
@@ -82,15 +88,6 @@ public class GListActivity extends ListActivity {
 							getBaseContext(), android.R.layout.simple_spinner_item, locations.toArray(strArray));
 					adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 					mFilter.setAdapter(adapter);
-					
-					/*String[] from = new String[] { InvDBAdapter.KEY_SUMMARY };
-					int[] to = new int[] { android.R.id.text1 };
-
-					// Now create an array adapter and set it to display using our row
-					SimpleCursorAdapter adapter = new SimpleCursorAdapter(getBaseContext(),
-							android.R.layout.simple_spinner_item, cursor, from, to);
-					adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					mFilter.setAdapter(adapter);*/
 					
 				} else {
 					// generate blank filter list

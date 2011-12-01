@@ -10,19 +10,24 @@ public class InventoryDatabaseHelper extends SQLiteOpenHelper {
 
 	private static final int DATABASE_VERSION = 1;
 
-	//Create database
+	// Create database for items
 	private static final String DATABASE_CREATE = "create table item (_id integer primary key autoincrement, "
 			+ "category text not null, summary text not null, description text not null, expiration text not null);";
+	
+	// Create database for locations
 	private static final String LOCATION_CREATE = "create table location (_id integer primary key autoincrement, "
 			+ "summary text not null, description text not null);";
+	
+	// Create database for grocery list items
 	private static final String GLIST_CREATE = "create table glist (_id integer primary key autoincrement, "
 			+ "category text not null, summary text not null, description text not null, expiration text not null);";
 
+	// Constructor
 	public InventoryDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
-	
+	// Called when first created, creates the databases if they do not exist
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		database.execSQL(LOCATION_CREATE);
