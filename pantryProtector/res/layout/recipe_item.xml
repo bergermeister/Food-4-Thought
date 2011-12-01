@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="@color/listcolor">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<Spinner
+	    android:id="@+id/category"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+
+</Spinner>
+		
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical">
+	    <TextView android:id="@+id/edit_expiration"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text=""/> 
+	</LinearLayout>
+	<LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/linearLayout1">
+		<Button android:layout_height="wrap_content" android:text="@string/edit_confirm" android:layout_width="wrap_content" android:id="@+id/edit_button"></Button>
+		<Button android:layout_height="wrap_content" android:text="@string/edit_cancel" android:layout_width="wrap_content" android:id="@+id/item_cancel"></Button>
+	</LinearLayout>
+
+
+</LinearLayout>
