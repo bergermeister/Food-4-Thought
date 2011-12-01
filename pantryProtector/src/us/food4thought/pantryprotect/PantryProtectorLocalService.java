@@ -1,6 +1,5 @@
 package us.food4thought.pantryprotect;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,15 +22,14 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 	private static NotificationManager notifManager;							// Notification Manager
 	private static Timer timer;													// Timer used for repeating schedules
 	private static Date date = new Date();										// Date required for Timer
-	//private static long day = 86400000;										// The length of one day in milliseconds
-	private static long minute =  60000;										// The length of one minute in milliseconds
+	private static long day = 86400000;											// The length of one day in milliseconds
+	//private static long minute =  60000;										// The length of one minute in milliseconds
 	private static int count = 0, mHour = 12, mMinute = 0;						// Initialize counter
 																				// Initialize hour and minute for the Date
 																				// Notifications
 	private static boolean notifOn = true, flashOn = true, vibrateOn = true;	// Initialize flags
 	private final IBinder mBinder = new LocalBinder();							// Create a local binder for this service
 	private InvDBAdapter adapter = new InvDBAdapter(this);						// Create an adapter to link to database
-	private ArrayList <Item> l;													// Stores the list of Items in the inventory
 
 	// Class to encapsulate the task to run
 	private class task extends TimerTask {
@@ -103,7 +101,7 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 		timer = new Timer("notificationTimer", true);
 		
 		// Create a schedule at a Fixed rate to check the database and create notifications
-		timer.scheduleAtFixedRate(new task(), date, minute);
+		timer.scheduleAtFixedRate(new task(), date, day);
 	}
 	
 	// Update local preferences from shared preferences
@@ -118,64 +116,78 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 	
 	// Checks the database then creates and pushes notifications and alerts to the android.
 	public void showNotification(){
+		String s;
+		count = 0;
+		
 		// Load the shared preferences
 		LoadPreferences();
-		String s;
-		// Open the database adapter
-		adapter.open();
 		
-		s = adapter.fetchAll(5);
-		// BROKEN: fetch all of the items about to expire
-		//l = new ArrayList <Item> (adapter.fetchAll());
-		
-		// Close the database adapter
-		adapter.close();
-		
-		if(notifOn){
-			Notification note = new Notification(R.drawable.icon, "Food Expiring", System.currentTimeMillis());
-
-			PendingIntent in = PendingIntent.getActivity(this, 0, new Intent(this, PantryProtectorActivity.class), 0);
-
-			note.icon = R.drawable.icon;
-			note.tickerText = "Food Expiring";
-			note.when = System.currentTimeMillis();
-			note.number = count;
-			note.flags |= Notification.FLAG_AUTO_CANCEL;
-			if (flashOn) {
-				// add lights
-	            note.flags |= Notification.FLAG_SHOW_LIGHTS;
-	            note.ledARGB = Color.CYAN;
-	            note.ledOnMS = 500;
-	            note.ledOffMS = 500;
-	        }
-			 
-	        if (vibrateOn) {
-	            // add vibs
-	        	if (debug) Log.i("DEBUG", ">>>>> ViBrAtInG. >>>>>");
-			    note.vibrate = new long[] {100, 200, 200, 200, 200, 200, 1000, 200, 200, 200, 1000, 200};
+		if (notifOn){
+			// Open the database adapter
+			adapter.open();
+			
+			s = adapter.fetchAll(5);
+			count = Integer.parseInt(s.substring(2));
+			
+			// BROKEN: fetch all of the items about to expire
+			//l = new ArrayList <Item> (adapter.fetchAll());
+			
+			// Close the database adapter
+			adapter.close();
+			
+			// If notifications are on
+			if(count > 0){
+				Notification note = new Notification(R.drawable.icon, "Food Expiring", System.currentTimeMillis());
+	
+				PendingIntent in = PendingIntent.getActivity(this, 0, new Intent(this, PantryProtectorActivity.class), 0);
+	
+				note.icon = R.drawable.icon;
+				note.tickerText = "Food Expiring";
+				note.when = System.currentTimeMillis();
+				note.number = count;
+				note.flags |= Notification.FLAG_AUTO_CANCEL;
+				
+				// Add flashing to the notifications
+				if (flashOn && s.charAt(1) == '1') {
+					// add lights to notifications
+					if(debug) Log.i("DEBUG", ">>>>> Flashing. >>>>>");
+		            note.flags |= Notification.FLAG_SHOW_LIGHTS;
+		            note.ledARGB = Color.CYAN;
+		            note.ledOnMS = 500;
+		            note.ledOffMS = 500;
+		        }
+				 
+				// Add vibration to notifications
+		        if (vibrateOn && s.charAt(0) == '1') {
+		            // add vibration to notifications
+		        	if (debug) Log.i("DEBUG", ">>>>> ViBrAtInG. >>>>>");
+				    note.vibrate = new long[] {100, 200, 200, 200, 200, 200, 1000, 200, 200, 200, 1000, 200};
+				}
+		        
+				note.setLatestEventInfo(this, 
+						"Items are about to expire!",
+						count + " items are about to expire!" , in);			
+				
+				notifManager.notify(NOTIF_ID, note);
+				
 			}
-	        
-			note.setLatestEventInfo(this, 
-					count + " items about to expire!",
-					s + " are about to expire!" , in);			
 			
-			notifManager.notify(NOTIF_ID, note);
-			
-		}
-		if (date.getHours() != mHour || date.getMinutes() != mMinute){
-			System.out.println("Original Schedule: " 
-					+ date.getDay() + "," 
-					+ date.getHours() + ":" 
-					+ date.getMinutes());
-			date = new Date();
-			date.setHours(mHour);
-			date.setMinutes(mMinute);
-			timer.cancel();
-			System.out.println("Changed Schedule: " 
-								+ date.getDay() + "," 
-								+ date.getHours() + ":" 
-								+ date.getMinutes());
-			startschedule();
+			// Debug statement for checking proper data flow
+			if (debug && (date.getHours() != mHour || date.getMinutes() != mMinute)){
+				System.out.println("Original Schedule: " 
+						+ date.getDay() + "," 
+						+ date.getHours() + ":" 
+						+ date.getMinutes());
+				date = new Date();
+				date.setHours(mHour);
+				date.setMinutes(mMinute);
+				timer.cancel();
+				System.out.println("Changed Schedule: " 
+									+ date.getDay() + "," 
+									+ date.getHours() + ":" 
+									+ date.getMinutes());
+				startschedule();
+			}
 		}
 	}
 }

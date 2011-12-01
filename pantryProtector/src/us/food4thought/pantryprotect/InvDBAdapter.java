@@ -1,6 +1,7 @@
 package us.food4thought.pantryprotect;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Vector;
@@ -11,7 +12,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-public class InvDBAdapter {
+public class InvDBAdapter implements IDebugSwitch{
 
 	// Database fields
 	public static final String KEY_ROWID = "_id";
@@ -223,10 +224,10 @@ public class InvDBAdapter {
 		String [] s = new String[] {KEY_DESCRIPTION, KEY_EXPIRATION, KEY_SUMMARY, KEY_CATEGORY};
 		Cursor cursor = database.query(DATABASE_TABLE, s, null, null, null, null, null);
 		cursor.moveToFirst();
-		Date date = new Date();
-		int month = date.getMonth();
-		int d = date.getDay();
-		int year = date.getYear();
+		final Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int d = c.get(Calendar.DAY_OF_MONTH);
 		while(!cursor.isAfterLast()){
 			String exp = cursor.getString(cursor.getColumnIndex(s[1]));
 			Integer month2;
@@ -238,9 +239,36 @@ public class InvDBAdapter {
 			d2 = Integer.parseInt(exp.substring(i + 1, i2));
 			year2 = Integer.parseInt(exp.substring(i2 + 1, exp.length() - 1));
 			//System.out.println(exp);
-			System.out.println(month2 + "-" + d2 + "-" + year2);
-			if (true){
-				
+			if (debug) System.out.println(month2 + "-" + d2 + "-" + year2 + "\t" + month + "-" + d + "-" + year);
+			if (year2 == year){
+				if (month2 == month){
+					if (d2 - d <= day){
+						count++;
+						if (d2 - d <= 0){
+							data = "11";
+						}
+					}
+				}
+				else if(month2 < month){
+					count++;
+					data = "11";
+				}
+				else if(month2 > month){
+					if(d - d2 > 26){
+						count++;
+					}
+				}
+			}
+			else if(year2 > year){
+				if(month2 == 1 && month == 12){
+					if(d - d2 > 26){
+						count++;
+					}
+				}
+			}
+			else if(year2 < year){
+				count++;
+				data = "11";
 			}
 			cursor.moveToNext();
 		}
