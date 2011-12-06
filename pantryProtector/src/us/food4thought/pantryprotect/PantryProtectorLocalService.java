@@ -23,7 +23,7 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 	private static Timer timer;													// Timer used for repeating schedules
 	private static Date date = new Date();										// Date required for Timer
 	private static long day = 86400000;											// The length of one day in milliseconds
-	//private static long minute =  60000;										// The length of one minute in milliseconds
+	private static long minute =  60000;										// The length of one minute in milliseconds
 	private static int count = 0, mHour = 12, mMinute = 0;						// Initialize counter
 																				// Initialize hour and minute for the Date
 																				// Notifications
@@ -63,8 +63,7 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 		Log.d(TAG, "onStartCommand");
 		
 		// Notify that the service has started
-		if(debug)
-			Toast.makeText(this, "Notification Service Started.", Toast.LENGTH_SHORT).show();
+		if(debug)Toast.makeText(this, "Notification Service Started.", Toast.LENGTH_SHORT).show();
 		
 		// Create a schedule for checking the database
 		startschedule();
@@ -86,8 +85,8 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 		timer.cancel();
 		
 		// Notify that the service has terminated
-		if(debug)
-			Toast.makeText(this, "Notification Service Stopped.", Toast.LENGTH_SHORT).show();
+		if(debug) Toast.makeText(this, "Notification Service Stopped.", Toast.LENGTH_SHORT).show();
+			
 	}
 	
 	// Returns a binder to this service.
@@ -101,7 +100,7 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 		timer = new Timer("notificationTimer", true);
 		
 		// Create a schedule at a Fixed rate to check the database and create notifications
-		timer.scheduleAtFixedRate(new task(), date, day);
+		timer.scheduleAtFixedRate(new task(), date, minute);
 	}
 	
 	// Update local preferences from shared preferences
@@ -171,9 +170,8 @@ public class PantryProtectorLocalService extends Service implements IDebugSwitch
 				notifManager.notify(NOTIF_ID, note);
 				
 			}
-			
 			// Debug statement for checking proper data flow
-			if (debug && (date.getHours() != mHour || date.getMinutes() != mMinute)){
+			if (date.getHours() != mHour || date.getMinutes() != mMinute){
 				System.out.println("Original Schedule: " 
 						+ date.getDay() + "," 
 						+ date.getHours() + ":" 
