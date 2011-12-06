@@ -1,21 +1,11 @@
 package us.food4thought.pantryprotect;
 
-import java.util.Calendar;
-
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class RecipeDisplay extends Activity {
 	private TextView mTitleText;
@@ -42,13 +32,8 @@ public class RecipeDisplay extends Activity {
 		Bundle extras = getIntent().getExtras();
 		mRowId = (bundle == null) ? null : (Long) bundle
 				.getSerializable(InvDBAdapter.KEY_ROWID);
-		if (extras != null) {
+		if (extras != null && extras.containsKey(InvDBAdapter.KEY_ROWID)) {
 			mRowId = extras.getLong(InvDBAdapter.KEY_ROWID);
-			if(extras.containsKey("SCAN_TITLE"))
-			{
-				scan = true;
-				mTitleText.setText(extras.getString("SCAN_TITLE"));
-			}
 		}
 		
 
@@ -69,7 +54,7 @@ public class RecipeDisplay extends Activity {
 	}
 	
 	private void populateFields() {
-		if (mRowId != null && !scan) {
+		if (mRowId != null && mRowId != 0 && !scan) {
 			Cursor todo = mDbHelper.fetchRecipe(mRowId);
 			startManagingCursor(todo);
 

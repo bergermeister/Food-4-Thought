@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ public class RecipeList extends ListActivity {
 	private static final int ACTIVITY_EDIT = 1;				// key: editing pre-existing item
 	private static final int DELETE_ID = Menu.FIRST + 1;
 	private Cursor cursor;
+	private int accessMode;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,14 +34,28 @@ public class RecipeList extends ListActivity {
 		helper = new InvDBAdapter(this);
 		helper.open();
 		fillData();
-		registerForContextMenu(getListView());
 		
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		Intent i = getIntent();
+		Bundle bundle = i.getExtras();
+		if( bundle != null && bundle.containsKey("requestMode") )
+			accessMode = bundle.getInt("requestMode");
+		else 
+			accessMode = 0;
+		
+		if( accessMode == 0 )
+			registerForContextMenu(getListView());
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.layout.listmenu, menu);
+		inflater.inflate(R.layout.recipe_menu, menu);
 		return true;
 	}
 
@@ -79,6 +95,7 @@ public class RecipeList extends ListActivity {
 
 	private void createItem() {
 		Intent i = new Intent(this, RecipeAdd.class);
+		i.putExtra("requestMode", accessMode);
 		startActivityForResult(i, ACTIVITY_CREATE);
 	}
 
@@ -86,11 +103,28 @@ public class RecipeList extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		Intent i = new Intent(this, RecipeDisplay.class);
-		i.putExtra(InvDBAdapter.KEY_ROWID, id);
-		// Activity returns an result if called with startActivityForResult
 		
-		startActivityForResult(i, ACTIVITY_EDIT);
+		if( accessMode != 0 ) {
+			
+			setResult((int)id);
+			finish();
+			
+		} else {
+
+			Intent i = new Intent(this, RecipeDisplay.class);
+			i.putExtra(InvDBAdapter.KEY_ROWID, id);
+			// Activity returns an result if called with startActivityForResult
+
+			startActivityForResult(i, ACTIVITY_EDIT);
+		}
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			setResult(RESULT_OK);
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 	
 
@@ -103,6 +137,10 @@ public class RecipeList extends ListActivity {
 			Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		fillData();
+		if( accessMode != 0 && resultCode != RESULT_OK ) {
+			setResult(resultCode);
+			finish();
+		}
 	}
 
 	private void fillData() {

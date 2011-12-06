@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<menu xmlns:android="http://schemas.android.com/apk/res/android">
-		<item android:id="@+id/add_meal" android:title="Add Meal"></item>
+		<item android:id="@+id/add_recipe" android:title="Add Recipe"></item>
+		<item android:id="@+id/clear_all" android:title="Clear All"></item>
 	</menu>

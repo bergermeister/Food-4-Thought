@@ -10,14 +10,19 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.TextView;
+//import android.widget.Toast;
 
 public class MealListActivity extends ListActivity {
 
@@ -27,8 +32,9 @@ public class MealListActivity extends ListActivity {
 
                 public void onDateSet(DatePicker view, int year, 
                                       int month, int day) {
-                	String mealID =  (String) DateFormat.format("EEEE, MMM dd, yyyy",
-                			new Date(year, month, day));
+                	String mealID =  (String) DateFormat.format("MM/dd/yyyy",
+                			new Date(year - 1900, month, day));
+//                	Toast.makeText(getBaseContext(), "" + year, Toast.LENGTH_SHORT).show();
                 	if(!mDatabase.dateExists(mealID))
                 		startViewMeal(MEAL_CREATE, mealID);
                 	else
@@ -54,6 +60,7 @@ public class MealListActivity extends ListActivity {
     	
     	// load existing meal plans into the list
     	fillData();
+		registerForContextMenu(getListView());
     }
     
     @Override
@@ -77,6 +84,9 @@ public class MealListActivity extends ListActivity {
 		case R.id.add_meal:
 			 showDialog(DATE_DIALOG_ID);
 			return true;
+		case R.id.clear_all:
+			shredMeals();
+			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
@@ -94,6 +104,13 @@ public class MealListActivity extends ListActivity {
 	    }
 	    return null;
 	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.add(0, DELETE_ID, 0, R.string.menu_delete);
+	}
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
@@ -101,13 +118,24 @@ public class MealListActivity extends ListActivity {
 		case DELETE_ID:
 			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 					.getMenuInfo();
-			ListView view = (ListView) findViewById(android.R.id.list);
-			TextView text = (TextView) view.getSelectedItem();
+			TextView text = (TextView)( (LinearLayout)getListView().getChildAt(info.position) ).getChildAt(0);
+//			Toast.makeText(this, (String) text.getText() + " deleted.", Toast.LENGTH_SHORT).show();
 			mDatabase.deleteMeal((String) text.getText());
 			fillData();
 			return true;
 		}
 		return super.onContextItemSelected(item);
+	}
+	
+	// ListView and view (row) on which was clicked, position and
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		Intent i = new Intent(this, MealViewActivity.class);
+		i.putExtra(InvDBAdapter.KEY_ROWID, ((TextView)((LinearLayout)v).getChildAt(0)).getText());
+		// Activity returns an result if called with startActivityForResult
+
+		startActivityForResult(i, MEAL_EDIT);
 	}
 	
 	private void fillData() {
@@ -128,6 +156,17 @@ public class MealListActivity extends ListActivity {
 		Intent i = new Intent().setClass(this, MealViewActivity.class);
 		i.putExtra(InvDBAdapter.KEY_ROWID, mealID);
 		startActivityForResult(i, accessMethod);
+	}
+	
+	private void shredMeals() {
+		int position = 0;
+		TextView text;
+		while( getListView().getChildAt(position) != null ) {
+			text = (TextView)( (LinearLayout)getListView().getChildAt(position) ).getChildAt(0);
+			mDatabase.deleteMeal((String) text.getText());
+			position++;
+		}
+		fillData();
 	}
 	
 	// Called with the result of the other activity

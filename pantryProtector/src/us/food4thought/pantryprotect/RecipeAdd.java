@@ -1,6 +1,7 @@
 package us.food4thought.pantryprotect;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +16,7 @@ public class RecipeAdd extends Activity {
 	private InvDBAdapter mDbHelper;
 	private Button confirmButton, cancelButton;
 	private boolean scan = false;
+	private int accessMode;
 	/*private DatePickerDialog.OnDateSetListener mDateSetListener =
             new DatePickerDialog.OnDateSetListener() {
 
@@ -77,7 +79,10 @@ public class RecipeAdd extends Activity {
 		confirmButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 				saveState();
-				setResult(RESULT_OK);
+				if( accessMode == 0 )
+					setResult(RESULT_OK);
+				else
+					setResult(mRowId.intValue());
 				finish();
 			}
 
@@ -132,26 +137,30 @@ public class RecipeAdd extends Activity {
     }*/
 	}
 	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		Intent i = getIntent();
+		Bundle bundle = i.getExtras();
+		if( bundle != null && bundle.containsKey("requestMode") )
+			accessMode = bundle.getInt("requestMode");
+		else
+			accessMode = 0;
+	}
+	
 	private void populateFields() {
 		if (mRowId != null && !scan) {
 			Cursor todo = mDbHelper.fetchRecipe(mRowId);
 			startManagingCursor(todo);
-			/*String category = todo.getString(todo
-					.getColumnIndexOrThrow(InvDBAdapter.KEY_CATEGORY));
-			
-			for (int i=0; i<mCategory.getCount(); i++){
-				Cursor temp = (Cursor) mCategory.getItemAtPosition(i);
-				String s = temp.getString(temp.getColumnIndex(InvDBAdapter.KEY_SUMMARY)); 
-				Log.e(null, s +" " + category);
-				if (s.equalsIgnoreCase(category)){
-					mCategory.setSelection(i);
-				}
-			}*/
-			
-			mTitleText.setText(todo.getString(todo
-					.getColumnIndexOrThrow(InvDBAdapter.KEY_SUMMARY)));
-			mBodyText.setText(todo.getString(todo
-					.getColumnIndexOrThrow(InvDBAdapter.KEY_DESCRIPTION)));
+
+			if(todo.getCount() > 0) {
+
+				mTitleText.setText(todo.getString(todo
+						.getColumnIndexOrThrow(InvDBAdapter.KEY_SUMMARY)));
+				mBodyText.setText(todo.getString(todo
+						.getColumnIndexOrThrow(InvDBAdapter.KEY_DESCRIPTION)));
+			}
 		}
 	}
 
@@ -172,11 +181,9 @@ public class RecipeAdd extends Activity {
 		String summary = mTitleText.getText().toString();
 		String description = "%";
         //String expiration = mDateDisplay.getText().toString();
-        
-        Toast.makeText(getApplicationContext(), summary, 2000);
 		
 
-		if (mRowId == null || scan) {
+		if (mRowId == null || mRowId == 0 || scan) {
 			long id = mDbHelper.createRecipe(summary, description);
 			if (id > 0) {
 				mRowId = id;
@@ -184,5 +191,7 @@ public class RecipeAdd extends Activity {
 		} else {
 			mDbHelper.updateRecipe(mRowId, summary, description);
 		}
+        
+        Toast.makeText(getApplicationContext(), summary + " :: " + mRowId.toString(), Toast.LENGTH_SHORT).show();
 	}
 }

@@ -167,7 +167,7 @@ public class GListActivity extends ListActivity {
 		case DELETE_ID:
 			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 					.getMenuInfo();
-			helper.deleteItem(info.id);
+			helper.deleteGrocery(info.id);
 			fillData();
 			return true;
 		}

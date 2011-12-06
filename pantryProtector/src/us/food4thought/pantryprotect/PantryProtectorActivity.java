@@ -48,10 +48,10 @@ public class PantryProtectorActivity extends TabActivity {
         Intent intent;
         
         // Create an intent to launch the ScanActivity, add an icon to its tab with spec, add the tab linked to ScanActivity
-        intent = new Intent().setClass(this, ScanActivity.class);
+/*        intent = new Intent().setClass(this, ScanActivity.class);
         spec = tabHost.newTabSpec("scan").setIndicator("Scan", res.getDrawable(R.drawable.ic_tab_scan)).setContent(intent);
         tabHost.addTab(spec);
-        
+*/        
         // Create an intent to launch the Inventory, add an icon to its tab with spec, add the tab linked to Inventory
         intent = new Intent().setClass(this, InventoryActivity.class);
         spec = tabHost.newTabSpec("inv").setIndicator("Inventory", res.getDrawable(R.drawable.ic_tab_inv)).setContent(intent);

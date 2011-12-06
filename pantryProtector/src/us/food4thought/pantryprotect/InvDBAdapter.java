@@ -388,7 +388,7 @@ public class InvDBAdapter implements IDebugSwitch{
 
 	// return a cursor of all meals in the database
 	public Cursor fetchAllMeals() throws SQLException {
-		Cursor mCursor = database.query(MEALS_TABLE, new String[] { KEY_ROWID, KEY_RECIPE_LIST }, null, null, null, null, null);
+		Cursor mCursor = database.query(MEALS_TABLE, new String[] { KEY_ROWID, KEY_RECIPE_LIST }, null, null, null, null, KEY_ROWID + " ASC");
 		if(mCursor != null) {
 			mCursor.moveToFirst();
 		}
@@ -427,7 +427,6 @@ public class InvDBAdapter implements IDebugSwitch{
 	public long createRecipe(String summary, String description) {
 		ContentValues initialValues = createLocationContentValues(summary,
 				description);
-
 		return database.insert(RECIPE_TABLE, null, initialValues);
 	}
 

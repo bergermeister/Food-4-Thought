@@ -1,35 +1,23 @@
 package us.food4thought.pantryprotect;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 public class RecipeDetails extends Activity {
 	private TextView mTitleText;
-	private TextView mBodyText;
 	private Long mRowId;
 	private InvDBAdapter mDbHelper;
 	private Spinner recs;
 
 	private Button confirmButton, cancelButton;
 	private boolean scan = false;
-	private static ArrayList<String> recArray = new ArrayList<String>();
-	private static final String[] strArray = new String[] {};	// empty string array for casting purposes
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -56,7 +44,7 @@ public class RecipeDetails extends Activity {
 			}
 		}
 		
-
+		
 		
 		// populate fields
 		populateFields();
@@ -113,7 +101,7 @@ public class RecipeDetails extends Activity {
 		String description = "%";
         //String expiration = mDateDisplay.getText().toString();
         
-        Toast.makeText(getApplicationContext(), summary, 2000);
+//        Toast.makeText(getApplicationContext(), summary, 2000);
 		
 
 		if (mRowId == null || scan) {
