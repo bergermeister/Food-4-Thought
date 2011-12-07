@@ -44,9 +44,13 @@ public class CookBook extends TabActivity {
         intent = new Intent().setClass(this, RecipeList.class);
         spec = tabHost.newTabSpec("inv").setIndicator("Recipes", res.getDrawable(R.drawable.ic_tab_inv)).setContent(intent);
         tabHost.addTab(spec);
+
+        int tab_id = 0;
+        if(savedInstanceState != null && savedInstanceState.containsKey("last_tab")) {
+        	tab_id = savedInstanceState.getInt("last_tab");
+        }
         
-        
-        tabHost.setCurrentTab(0);
+        tabHost.setCurrentTab(tab_id);
     }
     
     public static class Controller extends Activity {
@@ -98,6 +102,13 @@ public class CookBook extends TabActivity {
 			startActivity(intent);
 		}
     }
+
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		
+		// saves current tab to saved state bundle
+		outState.putInt("last_tab", getTabHost().getCurrentTab());
+	}
     
     // Called with the result of the other activity
  	// requestCode was the origin request code send to the activity

@@ -140,6 +140,7 @@ public final class R {
         public static final int abort_text=0x7f050004;
         public static final int app_name=0x7f050001;
         public static final int back_title=0x7f050016;
+        public static final int done_text=0x7f05001f;
         public static final int edit_cancel=0x7f05000d;
         public static final int edit_confirm=0x7f05000c;
         public static final int edit_description=0x7f05000b;

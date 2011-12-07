@@ -22,7 +22,7 @@ public class RecipeDisplay extends Activity {
 		super.onCreate(bundle);
 		mDbHelper = new InvDBAdapter(this);
 		mDbHelper.open();
-		setContentView(R.layout.recipe_display);
+		setContentView(R.layout.recipe_display); //R.layout.recipe_display);
 
 		mTitleText = (TextView) findViewById(R.id.textView1);
 		mBodyText = (TextView) findViewById(R.id.textView2);
@@ -31,11 +31,12 @@ public class RecipeDisplay extends Activity {
 		mRowId = null;
 		Bundle extras = getIntent().getExtras();
 		mRowId = (bundle == null) ? null : (Long) bundle
-				.getSerializable(InvDBAdapter.KEY_ROWID);
+				.getLong(InvDBAdapter.KEY_ROWID);
 		if (extras != null && extras.containsKey(InvDBAdapter.KEY_ROWID)) {
 			mRowId = extras.getLong(InvDBAdapter.KEY_ROWID);
 		}
-		
+
+		setResult(RESULT_OK);
 
 		
 		// populate fields
@@ -45,7 +46,6 @@ public class RecipeDisplay extends Activity {
 		// add a click listener to the Cancel button
 		cancelButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				setResult(RESULT_OK);
 				finish();
 			}
 
@@ -68,7 +68,7 @@ public class RecipeDisplay extends Activity {
 
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putSerializable(InvDBAdapter.KEY_ROWID, mRowId);
+		outState.putLong(InvDBAdapter.KEY_ROWID, mRowId);
 	}
 
 	@Override

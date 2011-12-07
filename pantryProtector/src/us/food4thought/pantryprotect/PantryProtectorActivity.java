@@ -48,10 +48,10 @@ public class PantryProtectorActivity extends TabActivity {
         Intent intent;
         
         // Create an intent to launch the ScanActivity, add an icon to its tab with spec, add the tab linked to ScanActivity
-/*        intent = new Intent().setClass(this, ScanActivity.class);
+        intent = new Intent().setClass(this, ScanActivity.class);
         spec = tabHost.newTabSpec("scan").setIndicator("Scan", res.getDrawable(R.drawable.ic_tab_scan)).setContent(intent);
         tabHost.addTab(spec);
-*/        
+        
         // Create an intent to launch the Inventory, add an icon to its tab with spec, add the tab linked to Inventory
         intent = new Intent().setClass(this, InventoryActivity.class);
         spec = tabHost.newTabSpec("inv").setIndicator("Inventory", res.getDrawable(R.drawable.ic_tab_inv)).setContent(intent);
@@ -63,7 +63,7 @@ public class PantryProtectorActivity extends TabActivity {
         tabHost.addTab(spec);
         
         intent = new Intent().setClass(this, CookBook.class);
-        spec = tabHost.newTabSpec("opts").setIndicator("Cook Book", res.getDrawable(R.drawable.ic_tab_opts)).setContent(intent);
+        spec = tabHost.newTabSpec("opts").setIndicator("Cook Book", res.getDrawable(R.drawable.ic_tab_inv)).setContent(intent);
         tabHost.addTab(spec);
         
         // Create an intent to launch the Meal List, add an icon to its tab with spec, add the tab linked to Meal List
@@ -77,7 +77,11 @@ public class PantryProtectorActivity extends TabActivity {
         tabHost.addTab(spec);
         
         // Initializes the current tab to ScanActivity
-        tabHost.setCurrentTab(0);
+        int tab_id = 0;
+        if(savedInstanceState != null && savedInstanceState.containsKey("lst_tab")) {
+        	tab_id = savedInstanceState.getInt("last_tab");
+        }
+        tabHost.setCurrentTab(tab_id);
         
         // Start the notification service
     	startService(new Intent(PantryProtectorActivity.this, PantryProtectorLocalService.class));
@@ -144,4 +148,11 @@ public class PantryProtectorActivity extends TabActivity {
  		super.onActivityResult(requestCode, resultCode, intent);
  		onResume();
  	}
+
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		
+		// saves current tab to saved state bundle
+		outState.putInt("last_tab", getTabHost().getCurrentTab());
+	}
 }
