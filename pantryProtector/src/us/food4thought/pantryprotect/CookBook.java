@@ -38,7 +38,7 @@ public class CookBook extends TabActivity {
         Intent intent;
         
         intent = new Intent().setClass(this, Ingredients.class);
-        spec = tabHost.newTabSpec("inv").setIndicator("Ingredients", res.getDrawable(R.drawable.ic_tab_inv)).setContent(intent);
+        spec = tabHost.newTabSpec("inv").setIndicator("Ingredients", res.getDrawable(R.drawable.ic_tab_ingr)).setContent(intent);
         tabHost.addTab(spec);
         
         intent = new Intent().setClass(this, RecipeList.class);

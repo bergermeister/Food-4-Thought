@@ -143,6 +143,12 @@ public class MealListActivity extends ListActivity {
 		Cursor cursor = mDatabase.fetchAllMeals();
 		startManagingCursor(cursor);
 		
+		// show/hide the list empty text as needed
+		if(cursor.getCount() == 0)
+			findViewById(R.id.meals_empty).setVisibility(View.VISIBLE);
+		else
+			findViewById(R.id.meals_empty).setVisibility(View.GONE);
+		
 		// set the to and from fields
 		String[] from = new String[] { InvDBAdapter.KEY_ROWID };
 		int[] to = new int[] { R.id.label };
